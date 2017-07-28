@@ -9,7 +9,7 @@ const {launchConfigEditor} = require('./config')
 
 let tray = null
 app.on('ready', () => {
-  tray = new Tray('./v2ray.png')
+  tray = new Tray('./resources/icon.png')
   let worker = new Worker()
   const contextMenu = Menu.buildFromTemplate([
     {

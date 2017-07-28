@@ -19,12 +19,18 @@
   },
   "build": {
     "appId": "com.v2ray.electron",
+    "extraResources": [
+      {
+        "from": "./resources",
+        "to": "./"
+      }
+    ],
     "mac": {
       "category": "your.app.category.type"
     },
     "win": {
-      "target": "portable",
-      "icon": "build/icon.ico"
+      "target": ["portable", "zip"],
+      "icon": "resources/icon.ico"
     }
   }
 }
