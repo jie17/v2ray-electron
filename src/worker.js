@@ -1,10 +1,11 @@
 const { execFile } = require('child_process');
 
 class Worker {
-  constructor() {
+  constructor(logger) {
     this.status = 'stopped';
     this.executablePath = "resources/v2ray/v2ray.exe";
     this.child = null;
+    this.logger = logger;
   }
 
   start() {
@@ -12,7 +13,13 @@ class Worker {
       // if (error) {
       //   throw error;
       // }
-      console.log(stdout);
+      // console.log(stdout);
+    });
+    this.child.stdout.on('data', data => {
+      this.logger.append(data)
+      });
+    this.child.stderr.on('data', data => {
+      this.logger.append(data)
     });
   }
 
