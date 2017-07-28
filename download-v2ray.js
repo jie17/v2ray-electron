@@ -29,7 +29,7 @@ else {
 
 function switchIntoWorkSpace {
   // Create v2ray if not exists and enter the folder
-  let dir = './v2ray';
+  let dir = './resources/v2ray';
   if (!fs.existsSync(dir)){
       fs.mkdirSync(dir);
   }
