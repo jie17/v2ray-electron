@@ -10,7 +10,12 @@ const {launchConfigEditor} = require('./config')
 let tray = null
 app.on('ready', () => {
   tray = new Tray('./v2ray.png')
+  let worker = new Worker()
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Restart V2Ray',
+      click () { worker.restart() }
+    },
     {
       label: 'Edit Config',
       click () { launchConfigEditor() }
@@ -19,9 +24,10 @@ app.on('ready', () => {
   ])
   tray.setToolTip('V2Ray')
   tray.setContextMenu(contextMenu)
-  let worker = new Worker()
+  
   worker.start()
+})
 
 app.on('window-all-closed', () => {
-  
+
 })

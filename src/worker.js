@@ -4,15 +4,21 @@ class Worker {
   constructor() {
     this.status = 'stopped';
     this.executablePath = "v2ray/wv2ray.exe";
+    this.child = null;
   }
 
   start() {
-    const child = execFile(this.executablePath, (error, stdout, stderr) => {
-      if (error) {
-        throw error;
-      }
+    this.child = execFile(this.executablePath, (error, stdout, stderr) => {
+      // if (error) {
+      //   throw error;
+      // }
       console.log(stdout);
     });
+  }
+
+  restart() {
+    this.child.kill();
+    this.start();
   }
 }
 
