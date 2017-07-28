@@ -32,7 +32,10 @@
       "category": "your.app.category.type"
     },
     "win": {
-      "target": ["portable", "zip"],
+      "target": [
+        "portable",
+        "zip"
+      ],
       "icon": "resources/icon.ico"
     }
   }
