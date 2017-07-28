@@ -3,8 +3,8 @@ const fs = require('fs')
 // const monaco = require('monaco-editor')
 
 let editor = null;
-let filename = "v2ray/config.json"
-let defaultFilename = "v2ray/config.json.default"
+let filename = "resources/v2ray/config.json"
+let defaultFilename = "resources/v2ray/config.json.default"
 
 loader().then((monaco) => {
   editor = monaco.editor.create(document.getElementById('container'), {
