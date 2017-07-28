@@ -11,6 +11,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "auto-launch": "^5.0.1",
     "monaco-loader": "^0.8.2"
   },
   "devDependencies": {
