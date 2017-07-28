@@ -3,7 +3,7 @@ const { execFile } = require('child_process');
 class Worker {
   constructor() {
     this.status = 'stopped';
-    this.executablePath = "v2ray/wv2ray.exe";
+    this.executablePath = "v2ray/v2ray.exe";
     this.child = null;
   }
 
