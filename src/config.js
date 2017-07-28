@@ -1,7 +1,11 @@
 const {BrowserWindow} = require('electron')
 
 function launchConfigEditor() {
-  let win = new BrowserWindow({width: 800, height: 600})
+  let win = new BrowserWindow({
+    width: 800, 
+    height: 600,
+    title: "Configuration Editor - V2Ray Electron"
+  })
   win.on('closed', () => {
     win = null
   })
