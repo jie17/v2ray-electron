@@ -1,7 +1,7 @@
 const path = require('path')
 const url = require('url')
 
-// require('electron-debug')({showDevTools: true})
+require('electron-debug')({showDevTools: true})
 
 const {app} = require('electron')
 const {initTray} = require('./tray')
