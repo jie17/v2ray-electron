@@ -1,7 +1,7 @@
 {
   "name": "v2ray-electron",
   "description": "A V2Ray client built with Electron for Windows and macOS",
-  "version": "1.0.0",
+  "version": "v0.0.1",
   "author": "Jie Lu",
   "main": "src/index.js",
   "scripts": {
