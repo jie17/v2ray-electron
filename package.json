@@ -14,8 +14,10 @@
     "monaco-loader": "^0.8.2"
   },
   "devDependencies": {
+    "adm-zip": "^0.4.7",
     "electron": "^1.6.11",
-    "electron-builder": "^19.6.3"
+    "electron-builder": "^19.6.3",
+    "request": "^2.81.0"
   },
   "build": {
     "appId": "com.v2ray.electron",
