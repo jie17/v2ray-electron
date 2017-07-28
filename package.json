@@ -22,6 +22,7 @@
   },
   "build": {
     "appId": "com.v2ray.electron",
+    "productName": "V2Ray Electron",
     "extraResources": [
       {
         "from": "./resources",
