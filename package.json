@@ -1,15 +1,30 @@
 {
   "name": "v2ray-electron",
+  "description": "A V2Ray client built with Electron for Windows and macOS",
   "version": "1.0.0",
+  "author": "Jie Lu",
   "main": "src/index.js",
   "scripts": {
     "start": "./node_modules/.bin/electron .",
-    "build-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=lib/media/punch.icns --asar --app-copyright='Jie Lu'",
-    "build-win": "electron-packager . --platform=win32 --arch=x64 --icon=lib/media/punch.ico --asar --app-copyright=\"Jie Lu\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "license": "MIT",
   "dependencies": {
-    "electron": "^1.6.11"
+    "monaco-loader": "^0.8.2"
+  },
+  "devDependencies": {
+    "electron": "^1.6.11",
+    "electron-builder": "^19.6.3"
+  },
+  "build": {
+    "appId": "com.v2ray.electron",
+    "mac": {
+      "category": "your.app.category.type"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "build/icon.ico"
+    }
   }
 }
