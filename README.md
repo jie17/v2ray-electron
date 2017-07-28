@@ -8,11 +8,14 @@ A V2Ray process will be spawned by the app.
 ## Features
 
 - ### Auto start
-- ### Edit configuration file through built-in Monaco editor.
+- ### Edit configuration file through built-in Monaco editor
+
+- ### Log viewer
 
 ## TODO
 
-- Show log in app
+- ~~Auto start~~
+- ~~Show log in app~~
 - Set up system proxy
 - Support PAC file
 - Fix syntax error in Monaco editor
