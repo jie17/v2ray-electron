@@ -21,4 +21,7 @@ app.on('ready', () => {
   tray.setContextMenu(contextMenu)
   let worker = new Worker()
   worker.start()
+
+app.on('window-all-closed', () => {
+  
 })
