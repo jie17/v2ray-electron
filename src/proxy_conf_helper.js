@@ -23,12 +23,10 @@ class SystemProxy {
 
   toggle() {
     if(this.enabled)
-      turnOffSystemProxy()
+      this.turnOffSystemProxy()
     else
-      setSystemProxy()
+      this.setSystemProxy()
   }
 }
-
-
 
 exports.SystemProxy = SystemProxy;
