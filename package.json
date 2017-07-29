@@ -26,6 +26,9 @@
     "request": "^2.81.0"
   },
   "build": {
+    "publish": [
+      "github"
+    ],
     "appId": "com.v2ray.electron",
     "productName": "V2Ray Electron",
     "asarUnpack": [
@@ -36,10 +39,6 @@
       "icon": "assets/icon.icns"
     },
     "win": {
-      "target": [
-        "portable",
-        "zip"
-      ],
       "icon": "assets/icon.ico"
     }
   }
