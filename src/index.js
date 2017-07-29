@@ -1,13 +1,14 @@
 const path = require('path')
-const url = require('url')
 
-require('electron-debug')({showDevTools: true})
+global.ROOT = path.join(__dirname, '..')
 
 const {app} = require('electron')
 const {initTray} = require('./tray')
 const {SystemProxy} = require('./proxy_conf_helper')
 const {Worker} = require('./worker')
 const {Logger} = require('./logger')
+
+require('electron-debug')({showDevTools: true})
 
 let tray = null
 let systemProxy = new SystemProxy()

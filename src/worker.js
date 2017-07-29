@@ -1,40 +1,48 @@
 const { execFile } = require('child_process')
 const os = require('os')
+const fs = require('fs-extra')
+const path = require('path')
+const {app} = require('electron')
 
 class Worker {
   constructor(logger) {
     this.status = 'stopped';
     if (os.platform() === "darwin")
-      this.executablePath = "resources/v2ray/v2ray";
+      this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray')
     else
-      this.executablePath = "resources/v2ray/v2ray.exe";
-    this.child = null;
-    this.logger = logger;
+      this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray.exe')
+    this.child = null
+    this.logger = logger
+    this.userDataPath = app.getPath('userData')
+    this.configPath = path.join(this.userDataPath, "v2ray.json")
+    this.initConfig()
   }
 
   start() {
-    this.child = execFile(this.executablePath, (error, stdout, stderr) => {
-      // if (error) {
-      //   throw error;
-      // }
-      // console.log(stdout);
-    });
+    this.child = execFile(this.executablePath, ["-config", this.configPath])
     this.child.stdout.on('data', data => {
       this.logger.append(data)
-      });
+      })
     this.child.stderr.on('data', data => {
       this.logger.append(data)
-    });
+    })
   }
 
   restart() {
-    this.child.kill();
-    this.start();
+    this.child.kill()
+    this.start()
   }
 
   stop() {
-    this.child.kill();
+    this.child.kill()
+  }
+
+  initConfig() {
+    if(!fs.existsSync(this.configPath)) {
+      let defaultConfigPath = path.join(global.ROOT, 'assets', 'v2ray', 'config.json.default')
+      fs.copySync(defaultConfigPath, this.configPath)
+    }
   }
 }
 
-exports.Worker = Worker;
+exports.Worker = Worker

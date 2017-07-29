@@ -1,13 +1,14 @@
-const {Menu, MenuItem, Tray} = require('electron')
+const {Menu, MenuItem, Tray, process} = require('electron')
 const {Worker} = require('./worker')
 const {launchConfigEditor} = require('./config')
 const {AutoStart} = require('./autostart')
 const {Logger} = require('./logger')
 const {SystemProxy} = require('./proxy_conf_helper')
 const os = require('os')
+const path = require('path')
 
 function initTray(worker, logger, systemProxy) {
-  tray = new Tray(`./resources/icon-${os.platform()}.png`)
+  tray = new Tray(path.join(global.ROOT, 'assets', `icon-${os.platform()}.png`))
   let autoStart = new AutoStart()
   let contextMenu = new Menu()
 

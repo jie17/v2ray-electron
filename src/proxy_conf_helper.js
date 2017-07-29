@@ -1,6 +1,7 @@
-const { execFile } = require('child_process');
+const { execFile } = require('child_process')
+const path = require('path')
 
-let executable = "resources/proxy_conf_helper"
+let executable = path.join(global.ROOT, 'assets', 'proxy_conf_helper')
 
 class SystemProxy {
   constructor() {

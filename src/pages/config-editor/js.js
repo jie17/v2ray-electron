@@ -1,10 +1,17 @@
 const loader = require('monaco-loader')
 const fs = require('fs')
+const {process, remote} = require('electron')
+const path = require('path')
+
 // const monaco = require('monaco-editor')
 
+global.ROOT = path.join(__dirname, '..', '..', '..')
+
+console.log(global.ROOT)
+
 let editor = null;
-let filename = "resources/v2ray/config.json"
-let defaultFilename = "resources/v2ray/config.json.default"
+let configPath = path.join(remote.app.getPath('userData'), "v2ray.json")
+let defaultConfigPath = path.join(global.ROOT, 'assets', 'v2ray', 'config.json.default');
 
 loader().then((monaco) => {
   editor = monaco.editor.create(document.getElementById('container'), {
@@ -13,12 +20,8 @@ loader().then((monaco) => {
     automaticLayout: true
   })
   
-  fs.readFile(filename, 'utf-8', (err, data) => {
-    editor.setModel(this.monaco.editor.createModel(data, 'javascript'));
-    // monaco.editor.create(document.getElementById("container"), {
-    //   value: data,
-    //   language: "json"
-    // });
+  fs.readFile(configPath, 'utf-8', (err, data) => {
+    editor.setModel(this.monaco.editor.createModel(data, 'json'));
   });
 })
 
@@ -30,11 +33,11 @@ function save() {
     data += line.text + model._EOL;
   });
 
-  fs.writeFile(filename, data, 'utf-8');
+  fs.writeFile(configPath, data, 'utf-8');
 }
 
 function loadDefault() {
-  fs.readFile(defaultFilename, 'utf-8', (err, data) => {
+  fs.readFile(defaultConfigPath, 'utf-8', (err, data) => {
     editor.setModel(this.monaco.editor.createModel(data, 'javascript'));
   });
 }
