@@ -31,6 +31,10 @@ class Worker {
     this.child.kill();
     this.start();
   }
+
+  stop() {
+    this.child.kill();
+  }
 }
 
 exports.Worker = Worker;
