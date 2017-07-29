@@ -1,4 +1,4 @@
-# v2ray-electron
+# V2Ray Electron
 
 A V2Ray client built with Electron for Windows and macOS
 
@@ -30,6 +30,12 @@ macOS only for now
 ```bash
 yarn dist
 ```
+
+## How to install and configure V2Ray server
+
+[V2Ray 用户手册](https://www.v2ray.com/)
+
+[V2Ray User Manual](https://www.v2ray.com/en/)
 
 ## TODO
 
