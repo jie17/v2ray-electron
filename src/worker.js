@@ -3,6 +3,7 @@ const os = require('os')
 const fs = require('fs-extra')
 const path = require('path')
 const {app, ipcMain} = require('electron')
+const log = require('electron-log');
 
 class Worker {
   constructor(logger) {
@@ -22,6 +23,7 @@ class Worker {
   }
 
   start() {
+    log.info("Starting worker ", this.executablePath)
     this.child = execFile(this.executablePath, ["-config", this.configPath])
     this.child.stdout.on('data', data => {
       this.logger.append(data)
@@ -32,6 +34,7 @@ class Worker {
   }
 
   restart() {
+    log.info("Restarting worker ", this.executablePath)
     this.child.kill()
     this.start()
   }
@@ -42,6 +45,7 @@ class Worker {
 
   initConfig() {
     if(!fs.existsSync(this.configPath)) {
+      log.info("Config file not exists. Copying from default config file.")
       let defaultConfigPath = path.join(global.ROOT, 'assets', 'v2ray', 'config.json.default')
       fs.copySync(defaultConfigPath, this.configPath)
     }
