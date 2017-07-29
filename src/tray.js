@@ -1,6 +1,6 @@
 const {Menu, MenuItem, Tray, process} = require('electron')
 const {Worker} = require('./worker')
-const {launchConfigEditor} = require('./config')
+const {ConfigEditor} = require('./config')
 const {AutoStart} = require('./autostart')
 const {Logger} = require('./logger')
 const {SystemProxy} = require('./proxy_conf_helper')
@@ -11,6 +11,7 @@ function initTray(worker, logger, systemProxy) {
   tray = new Tray(path.join(global.ROOT, 'assets', `icon-${os.platform()}.png`))
   let autoStart = new AutoStart()
   let contextMenu = new Menu()
+  let configEditor = new ConfigEditor()
 
   contextMenu.append(
     new MenuItem({
@@ -45,7 +46,7 @@ function initTray(worker, logger, systemProxy) {
   contextMenu.append(
     new MenuItem({
       label: 'Edit Config',
-      click () { launchConfigEditor() }
+      click () { configEditor.launch() }
     })
   )
 

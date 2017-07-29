@@ -1,24 +1,28 @@
 const {BrowserWindow} = require('electron')
 
-let win = null;
-
-function launchConfigEditor() {
-  if(!win) {
-    let win = new BrowserWindow({
-      width: 800, 
-      height: 600,
-      title: "Configuration Editor - V2Ray Electron"
-    })
-    win.on('closed', () => {
-      win = null
-    })
-
-    win.setMenu(null)
-    win.loadURL(`file://${__dirname}/pages/config-editor/index.html`)
+class ConfigEditor {
+  constructor() {
+    this.win = null
   }
-  else {
-    win.focus()
+
+  launch() {
+    if(!this.win) {
+      this.win = new BrowserWindow({
+        width: 800, 
+        height: 600,
+        title: "Configuration Editor - V2Ray Electron"
+      })
+      this.win.on('closed', () => {
+        this.win = null
+      })
+
+      this.win.setMenu(null)
+      this.win.loadURL(`file://${__dirname}/pages/config-editor/index.html`)
+    }
+    else {
+      this.win.focus()
+    }
   }
 }
 
-exports.launchConfigEditor = launchConfigEditor
+exports.ConfigEditor = ConfigEditor
