@@ -2,7 +2,7 @@ const { execFile } = require('child_process')
 const os = require('os')
 const fs = require('fs-extra')
 const path = require('path')
-const {app} = require('electron')
+const {app, ipcMain} = require('electron')
 
 class Worker {
   constructor(logger) {
@@ -16,6 +16,9 @@ class Worker {
     this.userDataPath = app.getPath('userData')
     this.configPath = path.join(this.userDataPath, "v2ray.json")
     this.initConfig()
+    ipcMain.on("restart", event => {
+      this.restart()
+    })
   }
 
   start() {

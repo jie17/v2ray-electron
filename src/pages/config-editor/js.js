@@ -1,6 +1,6 @@
 const loader = require('monaco-loader')
 const fs = require('fs')
-const {process, remote} = require('electron')
+const {process, remote, ipcRenderer} = require('electron')
 const path = require('path')
 
 // const monaco = require('monaco-editor')
@@ -11,7 +11,7 @@ console.log(global.ROOT)
 
 let editor = null;
 let configPath = path.join(remote.app.getPath('userData'), "v2ray.json")
-let defaultConfigPath = path.join(global.ROOT, 'assets', 'v2ray', 'config.json.default');
+let defaultConfigPath = path.join(global.ROOT, 'assets', 'v2ray', 'config.json.default')
 
 loader().then((monaco) => {
   editor = monaco.editor.create(document.getElementById('container'), {
@@ -22,22 +22,23 @@ loader().then((monaco) => {
   
   fs.readFile(configPath, 'utf-8', (err, data) => {
     editor.setModel(this.monaco.editor.createModel(data, 'json'));
-  });
+  })
 })
 
 function save() {
   const model = editor.getModel();
-  let data = '';
+  let data = ''
 
   model._lines.forEach((line) => {
-    data += line.text + model._EOL;
-  });
+    data += line.text + model._EOL
+  })
 
-  fs.writeFile(configPath, data, 'utf-8');
+  fs.writeFileSync(configPath, data, 'utf-8');
+  ipcRenderer.send("restart")
 }
 
 function loadDefault() {
   fs.readFile(defaultConfigPath, 'utf-8', (err, data) => {
-    editor.setModel(this.monaco.editor.createModel(data, 'javascript'));
-  });
+    editor.setModel(this.monaco.editor.createModel(data, 'javascript'))
+  })
 }
