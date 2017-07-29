@@ -3,9 +3,10 @@ const {Worker} = require('./worker')
 const {launchConfigEditor} = require('./config')
 const {AutoStart} = require('./autostart')
 const {Logger} = require('./logger')
+const os = require('os')
 
 function initTray() {
-  tray = new Tray('./resources/icon.png')
+  tray = new Tray(`./resources/icon-${os.platform()}.png`)
   let autoStart = new AutoStart()
   let logger = new Logger()
   let worker = new Worker(logger)
