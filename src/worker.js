@@ -1,9 +1,13 @@
-const { execFile } = require('child_process');
+const { execFile } = require('child_process')
+const os = require('os')
 
 class Worker {
   constructor(logger) {
     this.status = 'stopped';
-    this.executablePath = "resources/v2ray/v2ray.exe";
+    if (os.platform() === "darwin")
+      this.executablePath = "resources/v2ray/v2ray";
+    else
+      this.executablePath = "resources/v2ray/v2ray.exe";
     this.child = null;
     this.logger = logger;
   }
