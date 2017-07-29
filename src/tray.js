@@ -59,6 +59,12 @@ function initTray(worker, logger, systemProxy) {
 
   contextMenu.append(
     new MenuItem({
+      role: 'about'
+    })
+  )
+
+  contextMenu.append(
+    new MenuItem({
       role: 'quit'
     })
   )
