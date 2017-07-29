@@ -10,6 +10,7 @@ const {SystemProxy} = require('./proxy_conf_helper')
 const {Worker} = require('./worker')
 const {Logger} = require('./logger')
 const log = require('electron-log');
+const autoUpdater = require("electron-updater").autoUpdater
 
 require('electron-debug')({showDevTools: true})
 log.transports.file.level = 'debug';
