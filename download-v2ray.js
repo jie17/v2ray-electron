@@ -9,13 +9,21 @@ const AdmZip = require('adm-zip');
 let url = null;
 let destination_dir = null;
 let filename = null;
+let executable_name = null;
 
 if (os.platform() === "win32") {
   if (os.arch() === "x64") {
     url = `https://github.com/v2ray/v2ray-core/releases/download/${version}/v2ray-windows-64.zip`;
     filename = `v2ray-${version}-windows-64.zip`;
     destination_dir = `v2ray-${version}-windows-64`;
+    executable_name = "v2ray.exe";
   }
+}
+if (os.platform() === "darwin") {
+  url = `https://github.com/v2ray/v2ray-core/releases/download/${version}/v2ray-macos.zip`;
+  filename = `v2ray-${version}-macos.zip`;
+  destination_dir = `v2ray-${version}-macos`;
+  executable_name = "v2ray";
 }
 
 switchIntoWorkSpace();
@@ -27,7 +35,7 @@ else {
   unzipAndMove();
 }
 
-function switchIntoWorkSpace {
+function switchIntoWorkSpace() {
   // Create v2ray if not exists and enter the folder
   let dir = './resources/v2ray';
   if (!fs.existsSync(dir)){
@@ -37,7 +45,7 @@ function switchIntoWorkSpace {
 }
 
 function cleanUpOldFiles() {
-  ["./v2ray.exe", "config.json.default"].forEach(filename => removeIfExists(filename));
+  [executable_name, "config.json.default"].forEach(filename => removeIfExists(filename));
   removeIfExists(destination_dir);
 }
 
@@ -58,7 +66,7 @@ function removeIfExists(path) {
 }
 
 function download() {
-  console.log(url, filename);
+  console.log("Downloading ", url);
   if (url !== null) {
     request(url).pipe(fs.createWriteStream(filename)).on('finish', () => { unzipAndMove()})
   }
@@ -66,9 +74,9 @@ function download() {
 
 function unzipAndMove() {
     let zip = new AdmZip(filename);
-    zip.extractEntryTo(`${destination_dir}/v2ray.exe`, "./");
+    zip.extractEntryTo(`${destination_dir}/${executable_name}`, "./");
     zip.extractEntryTo(`${destination_dir}/config.json`, "./");
-    fs.renameSync(`${destination_dir}/v2ray.exe`, "./v2ray.exe");
+    fs.renameSync(`${destination_dir}/${executable_name}`, `./${executable_name}`);
     fs.renameSync(`${destination_dir}/config.json`, "./config.json.default");
     fs.rmdirSync(destination_dir);
 }
