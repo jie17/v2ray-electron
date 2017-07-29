@@ -31,7 +31,7 @@
       }
     ],
     "mac": {
-      "category": "your.app.category.type"
+      "icon": "resources/icon.icns"
     },
     "win": {
       "target": [

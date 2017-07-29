@@ -3,13 +3,12 @@ const {Worker} = require('./worker')
 const {launchConfigEditor} = require('./config')
 const {AutoStart} = require('./autostart')
 const {Logger} = require('./logger')
+const {SystemProxy} = require('./proxy_conf_helper')
 const os = require('os')
 
-function initTray() {
+function initTray(worker, logger, systemProxy) {
   tray = new Tray(`./resources/icon-${os.platform()}.png`)
   let autoStart = new AutoStart()
-  let logger = new Logger()
-  let worker = new Worker(logger)
   let contextMenu = new Menu()
 
   contextMenu.append(
@@ -18,6 +17,19 @@ function initTray() {
       click () { worker.restart() }
     })
   )
+
+  if (os.platform() === "darwin") {
+    contextMenu.append(
+      new MenuItem({
+        label: 'System proxy',
+        type: "checkbox",
+        click () {
+          systemProxy.toggle()
+          this.checked = !this.checked
+        }
+      })
+    )
+  }
 
   let menuForAutoStart = new MenuItem({
     label: "Start on Boot",
