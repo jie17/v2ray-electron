@@ -9,7 +9,8 @@ const {initTray} = require('./tray')
 const {SystemProxy} = require('./proxy_conf_helper')
 const {Worker} = require('./worker')
 const {Logger} = require('./logger')
-const log = require('electron-log');
+const os = require('os')
+const log = require('electron-log')
 const autoUpdater = require("electron-updater").autoUpdater
 
 require('electron-debug')({showDevTools: true})
@@ -22,7 +23,8 @@ let worker = new Worker(logger)
 
 app.on('ready', () => {
   log.info("App ready")
-  app.dock.hide()
+  if (os.platform() === 'darwin')
+    app.dock.hide()
   initTray(worker, logger, systemProxy)
 })
 
