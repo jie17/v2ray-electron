@@ -1,5 +1,4 @@
 
-require ('hazardous');
 const path = require('path');
 
 global.ROOT = path.join(__dirname, '..')

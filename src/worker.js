@@ -8,10 +8,8 @@ const log = require('electron-log');
 class Worker {
   constructor(logger) {
     this.status = 'stopped';
-    if (os.platform() === "darwin")
-      this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray')
-    else
-      this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray.exe')
+    let executableName = os.platform() === "darwin" ? 'v2ray' : 'v2ray.exe'
+    this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', executableName).replace('app.asar', 'app.asar.unpacked')
     this.child = null
     this.logger = logger
     this.userDataPath = app.getPath('userData')
@@ -24,6 +22,7 @@ class Worker {
 
   start() {
     log.info("Starting worker ", this.executablePath)
+    log.info("With config", this.configPath)
     this.child = execFile(this.executablePath, ["-config", this.configPath])
     this.child.stdout.on('data', data => {
       this.logger.append(data)
