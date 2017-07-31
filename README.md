@@ -21,9 +21,9 @@ Since the configuration file of V2Ray is quite complex and flexible, I think it'
 
 - Log viewer
 
-- Set up system proxy
+- Set up system proxy (macOS only for now)
 
-macOS only for now
+
 
 ## Packaging
 
@@ -41,6 +41,6 @@ yarn dist
 
 - ~~Auto start~~
 - ~~Show log in app~~
-- Set up system proxy
+- Set up system proxy for Windows
 - Support PAC file
 - Get root priviledge on start
