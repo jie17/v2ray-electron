@@ -1,6 +1,7 @@
 const {Menu, MenuItem, Tray, process, app} = require('electron')
 const {Worker} = require('./worker')
-const {ConfigEditor} = require('./config')
+const {ConfigEditor} = require('./config-editor')
+const {PacEditor} = require('./pac-editor')
 const {AutoStart} = require('./autostart')
 const {Logger} = require('./logger')
 const {SystemProxy} = require('./proxy_conf_helper')
@@ -13,6 +14,19 @@ function initTray(worker, logger, systemProxy) {
   let autoStart = new AutoStart()
   let contextMenu = new Menu()
   let configEditor = new ConfigEditor()
+  let pacEditor = new PacEditor()
+
+  if (os.platform() === "darwin") {
+    for (let key in systemProxy.menuItems) {
+      contextMenu.append(systemProxy.menuItems[key])
+    }
+
+    contextMenu.append(
+      new MenuItem({
+        type: 'separator'
+      })
+    )
+  }
 
   contextMenu.append(
     new MenuItem({
@@ -20,19 +34,6 @@ function initTray(worker, logger, systemProxy) {
       click () { worker.restart() }
     })
   )
-
-  if (os.platform() === "darwin") {
-    contextMenu.append(
-      new MenuItem({
-        label: 'System proxy',
-        type: "checkbox",
-        click () {
-          systemProxy.toggle()
-          this.checked = !this.checked
-        }
-      })
-    )
-  }
 
   let menuForAutoStart = new MenuItem({
     label: "Start on Boot",
@@ -46,14 +47,23 @@ function initTray(worker, logger, systemProxy) {
 
   contextMenu.append(
     new MenuItem({
-      label: 'Edit Config',
+      label: 'Edit V2Ray Config',
       click () { configEditor.launch() }
     })
   )
 
+  if (os.platform() === "darwin") {
+    contextMenu.append(
+      new MenuItem({
+        label: 'Edit PAC File',
+        click () { pacEditor.launch() }
+      })
+    )
+  }
+
   contextMenu.append(
     new MenuItem({
-      label: 'Show log',
+      label: 'Show V2Ray Log',
       click () { logger.showWindow() }
     })
   )
