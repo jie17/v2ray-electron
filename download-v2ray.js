@@ -73,7 +73,7 @@ function removeIfExists(path) {
 
 function download(params) {
   console.log("Downloading ", params.url);
-  request(url).pipe(fs.createWriteStream(params.filename)).on('finish', () => {
+  request(params.url).pipe(fs.createWriteStream(params.filename)).on('finish', () => {
     unzipAndMove(params)
   })
 }
