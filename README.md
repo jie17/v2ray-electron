@@ -19,11 +19,11 @@ Since the configuration file of V2Ray is quite complex and flexible, I think it'
 
 - Edit configuration file through built-in Monaco editor
 
-- Log viewer
+- V2Ray Log viewer
 
-- Set up system proxy (macOS only for now)
+- Set system proxy mode (macOS only for now)
 
-
+- PAC support (macOS only for now)
 
 ## Packaging
 
@@ -41,6 +41,6 @@ yarn dist
 
 - ~~Auto start~~
 - ~~Show log in app~~
+- ~~Support PAC file~~
 - Set up system proxy for Windows
-- Support PAC file
-- Get root priviledge on start
+- Get root priviledge once for all
