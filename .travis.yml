@@ -1,10 +1,7 @@
 sudo: required
 
-os:
-  - linux
-  - osx
+os: osx
 osx_image: xcode8.3
-dist: trusty
 
 language: node_js
 node_js:
