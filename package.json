@@ -37,10 +37,22 @@
       "assets/proxy_conf_helper"
     ],
     "mac": {
-      "icon": "assets/icon.icns"
+      "icon": "assets/icon.icns",
+      "files": [
+        "src/**",
+        "assets/*",
+        "assets/v2ray/v2ray",
+        "assets/v2ray/config.json.default"
+      ]
     },
     "win": {
-      "icon": "assets/icon.ico"
+      "icon": "assets/icon.ico",
+      "files": [
+        "src/**",
+        "assets/*",
+        "assets/v2ray/v2ray.exe",
+        "assets/v2ray/config.json.default"
+      ]
     }
   }
 }
