@@ -17,7 +17,7 @@ class SystemProxy {
     this.pac_server = null
     this.userDataPath = app.getPath('userData')
     this.pacPath = path.join(this.userDataPath, "proxy.pac")
-    this.proxyConfHelperPath = path.join(global.ROOT, 'assets', 'proxy_conf_helper')
+    this.proxyConfHelperPath = path.join(global.ROOT, 'assets', 'proxy_conf_helper').replace('app.asar', 'app.asar.unpacked')
     this.initializeMenuItems()
     this.setMode(store.get('proxy-mode') || 'standalone')
   }
