@@ -22,6 +22,7 @@ let worker = new Worker(logger)
 
 app.on('ready', () => {
   log.info("App ready")
+  autoUpdater.checkForUpdates();
   if (os.platform() === 'darwin')
     app.dock.hide()
   initTray(worker, logger, systemProxy)
@@ -35,4 +36,12 @@ app.on('quit', () => {
   systemProxy.turnOffSystemProxyIfEnabled()
   worker.stop()
   log.info("App quit")
+})
+
+autoUpdater.on('update-not-available', (info) => {
+  setTimeout(() => autoUpdater.checkForUpdates(), 3600000);
+})
+
+autoUpdater.on('error', (err) => {
+  setTimeout(() => autoUpdater.checkForUpdates(), 3600000);
 })
