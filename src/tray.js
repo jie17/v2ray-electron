@@ -1,4 +1,4 @@
-const {Menu, MenuItem, Tray, process} = require('electron')
+const {Menu, MenuItem, Tray, process, app} = require('electron')
 const {Worker} = require('./worker')
 const {ConfigEditor} = require('./config')
 const {AutoStart} = require('./autostart')
@@ -6,6 +6,7 @@ const {Logger} = require('./logger')
 const {SystemProxy} = require('./proxy_conf_helper')
 const os = require('os')
 const path = require('path')
+const openAboutWindow = require('about-window').default;
 
 function initTray(worker, logger, systemProxy) {
   tray = new Tray(path.join(global.ROOT, 'assets', `icon-${os.platform()}.png`))
@@ -59,7 +60,12 @@ function initTray(worker, logger, systemProxy) {
 
   contextMenu.append(
     new MenuItem({
-      role: 'about'
+      label: `About ${app.getName()}`,
+      click(item, focusedWindow) {
+          openAboutWindow({
+              icon_path: path.join(__dirname, '..', 'assets', 'icon-win32.png')
+          });
+      }
     })
   )
 

@@ -26,6 +26,10 @@
   version "7.0.39"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.39.tgz#8aced4196387038113f6f9aa4014ab4c51edab3c"
 
+about-window@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/about-window/-/about-window-1.7.1.tgz#bfacaa445702857d1c4a0768288e02159cdb9867"
+
 adm-zip@^0.4.7:
   version "0.4.7"
   resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.4.7.tgz#8606c2cbf1c426ce8c8ec00174447fd49b6eafc1"
@@ -181,10 +185,6 @@ brace-expansion@^1.1.7:
 builtin-modules@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
-
-callsite@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/callsite/-/callsite-1.0.0.tgz#280398e5d664bd74038b6f0905153e6e8af1bc20"
 
 camelcase-keys@^2.0.0:
   version "2.1.0"
@@ -785,12 +785,6 @@ hawk@~3.1.3:
     cryptiles "2.x.x"
     hoek "2.x.x"
     sntp "1.x.x"
-
-hazardous@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/hazardous/-/hazardous-0.3.0.tgz#f72212ef349039de7f5b7a86589de7662a870222"
-  dependencies:
-    callsite "^1.0.0"
 
 hoek@2.x.x:
   version "2.16.3"
