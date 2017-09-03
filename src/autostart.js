@@ -1,38 +1,13 @@
-// const Registry = require('winreg')
-const AutoLaunch = require('auto-launch');
-
-// class AutoStart {
-//   constructor() {
-//     this.regKey = new Registry({                                       // new operator is optional
-//       hive: Registry.HKCU,                                        // open registry hive HKEY_CURRENT_USER
-//       key:  '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run' // key containing autostart programs
-//     })
-//     this.name = "V2Ray_Electron"
-//   }
-
-//   enable() {
-//     this.regKey.set(this.name, Registry.REG_SZ, value, function(err) {
-
-//     })
-//   }
-
-//   disable() {
-//     this.regKey.remove(this.name, function(err) {
-
-//     })
-//   }
-
-//   enabled() {
-//     this.regKey.valueExists(this.name, function(err, exists) {
-//       return exists
-//     })
-//   }
-// }
+const AutoLaunch = require('auto-launch')
+const { app } = require('electron')
 
 class AutoStart {
   constructor() {
     this.autoLauncher = new AutoLaunch({
-      name: 'V2Ray Electron'
+      mac: {
+        useLaunchAgent: true,
+      },
+      name: app.getName()
     });
   }
 
