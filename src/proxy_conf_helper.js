@@ -19,7 +19,14 @@ class SystemProxy {
     this.pacPath = path.join(this.userDataPath, "proxy.pac")
     this.proxyConfHelperPath = path.join(global.ROOT, 'assets', 'proxy_conf_helper').replace('app.asar', 'app.asar.unpacked')
     this.initializeMenuItems()
-    this.setMode(store.get('proxy-mode') || 'standalone')
+    this.mode = store.get('proxy-mode')
+    if (this.mode) {
+      this.applyModePacServer(this.mode)
+      this.setMode(this.mode)
+    }
+    else {
+      this.setMode('standalone')
+    }
   }
 
   initializeMenuItems() {
@@ -29,33 +36,51 @@ class SystemProxy {
       label: 'Standalone Mode',
       type: "checkbox",
       click(menuItem, browserWindow, event) {
-        me.turnOffPacServer()
-        execFile(me.proxyConfHelperPath, ["-m", "off"])
-        me.setMode('standalone')
+        me.applyMode('standalone')
       }
     })
     me.menuItems.pac = new MenuItem({
       label: 'Pac Mode',
       type: "checkbox",
       click(menuItem, browserWindow, event) {
-        if (me.mode !== 'pac') {
-          me.turnOnPacServer()
-          execFile(me.proxyConfHelperPath, ["-m", "auto", "-u", "http://localhost:22222/proxy.pac"])
-          me.setMode('pac')
-        }
+        me.applyMode('pac')
       }
     })
     me.menuItems.global = new MenuItem({
       label: 'Global Mode',
       type: "checkbox",
       click(menuItem, browserWindow, event) {
-        if (me.mode !== 'global') {
-          me.turnOffPacServer()
-          execFile(me.proxyConfHelperPath, ["-m", "global", "-p", "1080"])
-          me.setMode('global')
-        }
+        me.applyMode('global')
       }
     })
+  }
+
+  applyMode(mode) {
+    let me = this
+    if (mode !== this.mode) {
+      switch (mode) {
+        case 'standalone':
+          execFile(me.proxyConfHelperPath, ["-m", "off"])
+          break
+        case 'pac':
+          execFile(me.proxyConfHelperPath, ["-m", "auto", "-u", "http://localhost:22222/proxy.pac"])
+          break
+        case 'global':
+          execFile(me.proxyConfHelperPath, ["-m", "global", "-p", "1080"])
+          break
+      }
+      me.applyModePacServer(mode)
+      me.setMode(mode)
+    }
+  }
+
+  applyModePacServer(mode) {
+    if (mode === 'pac') {
+      this.turnOnPacServer()
+    }
+    else {
+      this.turnOffPacServer()
+    }
   }
 
   setMode(mode) {
