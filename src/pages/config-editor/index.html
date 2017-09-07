@@ -2,11 +2,26 @@
     <head>
         <link href="https://cdn.muicss.com/mui-0.9.20/css/mui.min.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.muicss.com/mui-0.9.20/js/mui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vex-js/4.0.0/js/vex.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/4.0.0/css/vex.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/4.0.0/css/vex-theme-default.min.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="./style.css" />
     </head>
     <body>
-        <button class="mui-btn mui-btn--danger" onclick="loadDefault()">Load Default</button>
-        <button class="mui-btn mui-btn--primary" onclick="save()">Save</button>
+        <div class="profiles-toolbar">
+                <div class="mui-select profiles-wrapper">
+            <select class="profiles" value="-1">
+            </select>
+        </div>
+            <button class="mui-btn mui-btn--raised create-profile">Create</button>
+            <button class="mui-btn mui-btn--raised rename-profile">Rename</button>
+            <button class="mui-btn mui-btn--raised delete-profile">Delete</button>
+            <button class="mui-btn mui-btn--raised mui-btn--danger use-profile">Apply To V2Ray</button>
+        </div>
+        <div>
+            <button class="mui-btn mui-btn--primary" onclick="loadDefault()">Load Default</button>
+            <button class="mui-btn mui-btn--primary" onclick="saveProfile()">Save</button>
+        </div>
         <div id="container"></div>
         <script src='./js.js'></script>
     </body>

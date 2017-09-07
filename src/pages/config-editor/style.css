@@ -13,3 +13,18 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.profiles-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profiles {
+}
+
+.profiles-wrapper {
+  flex: 1;
+  margin-right: 10px;
+}
