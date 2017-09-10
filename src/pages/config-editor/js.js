@@ -5,7 +5,6 @@ const path = require('path')
 const Store = require('electron-store')
 
 global.ROOT = path.join(__dirname, '..', '..', '..')
-vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-default'
 const store = new Store()
 let editor = null
