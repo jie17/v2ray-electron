@@ -28,6 +28,10 @@ function loadProfiles() {
   let select = document.querySelector(".profiles")
   select.innerHTML = ""
   let profiles = store.get("v2ray-profiles")
+  if (!profiles) {
+    profiles = []
+    store.set("profiles", profiles)
+  }
   profiles.forEach((profile, index) => {
     let option = document.createElement("option")
     option.text = profile.name
