@@ -62,3 +62,6 @@ dist
 
 # v2ray
 v2ray
+
+# JetBrains
+.idea
