@@ -1,4 +1,4 @@
-const { execFile } = require('child_process')
+const { execFile, exec } = require('child_process')
 const os = require('os')
 const fs = require('fs-extra')
 const path = require('path')
@@ -10,6 +10,9 @@ class Worker {
     this.status = 'stopped';
     let executableName = os.platform() === "darwin" ? 'v2ray' : 'v2ray.exe'
     this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray', executableName).replace('app.asar', 'app.asar.unpacked')
+    if (os.platform() === 'darwin') {
+      exec(`chmod +x ${this.executablePath}`)
+    }
     this.child = null
     this.logger = logger
     this.userDataPath = app.getPath('userData')
