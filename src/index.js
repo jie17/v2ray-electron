@@ -3,7 +3,7 @@ const path = require('path');
 
 global.ROOT = path.join(__dirname, '..')
 
-const {app} = require('electron')
+const {app, Menu} = require('electron')
 const {initTray} = require('./tray')
 const {SystemProxy} = require('./proxy_conf_helper')
 const {Worker} = require('./worker')
@@ -22,7 +22,26 @@ let worker = new Worker(logger)
 
 app.on('ready', () => {
   log.info("App ready")
-  autoUpdater.checkForUpdates();
+
+  const template = [
+    {
+      label: 'Edit',
+      submenu: [
+        {role: 'undo'},
+        {role: 'redo'},
+        {type: 'separator'},
+        {role: 'cut'},
+        {role: 'copy'},
+        {role: 'paste'},
+        {role: 'pasteandmatchstyle'},
+        {role: 'delete'},
+        {role: 'selectall'}
+      ]
+    }
+  ]
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+
+    autoUpdater.checkForUpdates();
   if (os.platform() === 'darwin')
     app.dock.hide()
   initTray(worker, logger, systemProxy)
