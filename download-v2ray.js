@@ -4,7 +4,7 @@ const https = require('https');
 const fs = require('fs-extra');
 const os = require('os');
 const request = require('request');
-const AdmZip = require('adm-zip');
+const unzipper = require('unzipper');
 
 switchIntoWorkSpace();
 
@@ -74,10 +74,15 @@ function download(params) {
 }
 
 function unzipAndMove(params) {
-  let zip = new AdmZip(params.filename);
-  zip.extractAllTo("./");
-  fs.renameSync(`${params.destination_dir}/config.json`, `./${params.destination_dir}/config.json.default`);
-  fs.renameSync(`${params.destination_dir}`, `./v2ray`);
+  fs.createReadStream(params.filename)
+  .pipe(unzipper.Extract({ path: process.cwd() }))
+  .on('finish', () => {
+    fs.renameSync(`./${params.destination_dir}/config.json`, `./${params.destination_dir}/config.json.default`);
+    // Avoid "EPERM: operation not permitted" on Windows
+    setTimeout(function() {
+      fs.renameSync(`./${params.destination_dir}`, './v2ray');
+    }, 1000);
+  });
 }
 
 function runningOnTravis() {
