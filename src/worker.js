@@ -9,7 +9,7 @@ class Worker {
   constructor(logger) {
     this.status = 'stopped';
     let executableName = os.platform() === "darwin" ? 'v2ray' : 'v2ray.exe'
-    this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', executableName).replace('app.asar', 'app.asar.unpacked')
+    this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray', executableName).replace('app.asar', 'app.asar.unpacked')
     this.child = null
     this.logger = logger
     this.userDataPath = app.getPath('userData')
@@ -45,7 +45,7 @@ class Worker {
   initConfig() {
     if(!fs.existsSync(this.configPath)) {
       log.info("Config file not exists. Copying from default config file.")
-      let defaultConfigPath = path.join(global.ROOT, 'assets', 'v2ray', 'config.json.default')
+      let defaultConfigPath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray', 'config.json.default')
       fs.copySync(defaultConfigPath, this.configPath)
     }
   }

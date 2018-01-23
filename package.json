@@ -42,8 +42,7 @@
       "files": [
         "src/**",
         "assets/*",
-        "assets/v2ray/v2ray",
-        "assets/v2ray/config.json.default"
+        "assets/v2ray/v2ray"
       ]
     },
     "win": {
@@ -51,8 +50,7 @@
       "files": [
         "src/**",
         "assets/*",
-        "assets/v2ray/v2ray.exe",
-        "assets/v2ray/config.json.default"
+        "assets/v2ray/v2ray"
       ]
     }
   }

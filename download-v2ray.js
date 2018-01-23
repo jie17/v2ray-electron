@@ -1,4 +1,4 @@
-let version = "v2.36.3";
+let version = "v3.6";
 
 const https = require('https');
 const fs = require('fs-extra');
@@ -52,7 +52,7 @@ function switchIntoWorkSpace() {
 }
 
 function cleanUpOldFiles(params) {
-  [params.executable_name, "config.json.default"].forEach(filename => removeIfExists(filename));
+  removeIfExists('v2ray');
   removeIfExists(params.destination_dir);
 }
 
@@ -62,12 +62,7 @@ function alreadyExists(params) {
 
 function removeIfExists(path) {
   if (fs.existsSync(path)) {
-    if (fs.lstatSync(path).isDirectory()) {
-      fs.rmdirSync(path);
-    } else {
-      fs.unlinkSync(path);
-    }
-
+    fs.removeSync(path);
   }
 }
 
@@ -80,11 +75,9 @@ function download(params) {
 
 function unzipAndMove(params) {
   let zip = new AdmZip(params.filename);
-  zip.extractEntryTo(`${params.destination_dir}/${params.executable_name}`, "./");
-  zip.extractEntryTo(`${params.destination_dir}/config.json`, "./");
-  fs.renameSync(`${params.destination_dir}/${params.executable_name}`, `./${params.executable_name}`);
-  fs.renameSync(`${params.destination_dir}/config.json`, "./config.json.default");
-  fs.rmdirSync(params.destination_dir);
+  zip.extractAllTo("./");
+  fs.renameSync(`${params.destination_dir}/config.json`, `./${params.destination_dir}/config.json.default`);
+  fs.renameSync(`${params.destination_dir}`, `./v2ray`);
 }
 
 function runningOnTravis() {
