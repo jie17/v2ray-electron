@@ -1,5 +1,5 @@
 const {
-  execFile
+  exec, execFile
 } = require('child_process')
 const {
   app,
@@ -8,8 +8,9 @@ const {
 const path = require('path')
 const http = require('http')
 const fs = require('fs')
-const Store = require('electron-store');
-const store = new Store();
+const sudo = require('sudo-prompt')
+const Store = require('electron-store')
+const store = new Store()
 
 class SystemProxy {
   constructor() {
@@ -17,7 +18,9 @@ class SystemProxy {
     this.pac_server = null
     this.userDataPath = app.getPath('userData')
     this.pacPath = path.join(this.userDataPath, "proxy.pac")
-    this.proxyConfHelperPath = path.join(global.ROOT, 'assets', 'proxy_conf_helper').replace('app.asar', 'app.asar.unpacked')
+    this.proxyConfHelperPath = path.join(this.userDataPath, 'proxy_conf_helper')
+    this.bundledProxyConfHelperPath = path.join(global.ROOT, 'assets', 'proxy_conf_helper').replace('app.asar', 'app.asar.unpacked')
+    this.installHelper()
     this.initializeMenuItems()
     this.mode = store.get('proxy-mode')
     if (this.mode) {
@@ -26,6 +29,25 @@ class SystemProxy {
     }
     else {
       this.setMode('standalone')
+    }
+  }
+
+  installHelper() {
+    if (!fs.existsSync(this.proxyConfHelperPath)) {
+      let options = {
+        name: app.getName(),
+        icns: path.join(global.ROOT, 'assets', 'icon.icns')
+      };
+      let command = `cp "${this.bundledProxyConfHelperPath}" "${this.proxyConfHelperPath}" && chown root:admin "${this.proxyConfHelperPath}" && chmod a+rx "${this.proxyConfHelperPath}" && chmod +s "${this.proxyConfHelperPath}"`
+      sudo.exec(command, options,
+        function(error, stdout, stderr) {
+          if (error) {
+            console.error(error)
+          } else {
+            console.log('Successfully installed helper')
+          }
+        }
+      );
     }
   }
 
@@ -56,21 +78,26 @@ class SystemProxy {
   }
 
   applyMode(mode) {
-    let me = this
+    let realHelperPath
+    if (fs.existsSync(this.proxyConfHelperPath)) {
+      realHelperPath = this.proxyConfHelperPath
+    } else {
+      realHelperPath = this.bundledProxyConfHelperPath
+    }
     if (mode !== this.mode) {
       switch (mode) {
         case 'standalone':
-          execFile(me.proxyConfHelperPath, ["-m", "off"])
+          execFile(realHelperPath, ["-m", "off"])
           break
         case 'pac':
-          execFile(me.proxyConfHelperPath, ["-m", "auto", "-u", "http://localhost:22222/proxy.pac"])
+          execFile(realHelperPath, ["-m", "auto", "-u", "http://localhost:22222/proxy.pac"])
           break
         case 'global':
-          execFile(me.proxyConfHelperPath, ["-m", "global", "-p", "1080"])
+          execFile(realHelperPath, ["-m", "global", "-p", "1080"])
           break
       }
-      me.applyModePacServer(mode)
-      me.setMode(mode)
+      this.applyModePacServer(mode)
+      this.setMode(mode)
     }
   }
 
