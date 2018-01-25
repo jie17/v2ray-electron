@@ -55,6 +55,9 @@ app.on('window-all-closed', () => {
 
 app.on('quit', () => {
   worker.stop()
+  if (systemProxy) {
+    systemProxy.turnOffSystemProxyIfEnabled()
+  }
   log.info("App quit")
 })
 
