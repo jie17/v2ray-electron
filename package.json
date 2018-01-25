@@ -35,7 +35,7 @@
     "appId": "com.v2ray.electron",
     "productName": "V2Ray Electron",
     "asarUnpack": [
-      "assets/v2ray/*",
+      "assets/v2ray/**/*",
       "assets/proxy_conf_helper"
     ],
     "mac": {
