@@ -8,7 +8,7 @@ const unzipper = require('unzipper');
 
 switchIntoWorkSpace();
 
-if (true) {
+if (runningOnTravis()) {
   ["win32", "darwin"].forEach(platform => runTaskOnPlatform(platform));
 }
 else {
@@ -54,7 +54,7 @@ function switchIntoWorkSpace() {
 }
 
 function cleanUpOldFiles(params) {
-  removeIfExists('v2ray');
+  removeIfExists(params.target_dir);
   removeIfExists(params.extract_dir);
 }
 
