@@ -16,7 +16,7 @@ require('electron-debug')({showDevTools: true})
 log.transports.file.level = 'debug';
 
 let tray = null
-let systemProxy = new SystemProxy()
+let systemProxy = os.platform() === "darwin" ? new SystemProxy() : null
 let logger = new Logger()
 let worker = new Worker(logger)
 

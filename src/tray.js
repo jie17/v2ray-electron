@@ -16,7 +16,7 @@ function initTray(worker, logger, systemProxy) {
   let configEditor = new ConfigEditor()
   let pacEditor = new PacEditor()
 
-  if (os.platform() === "darwin") {
+  if (systemProxy) {
     for (let key in systemProxy.menuItems) {
       contextMenu.append(systemProxy.menuItems[key])
     }
