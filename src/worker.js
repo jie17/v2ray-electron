@@ -9,9 +9,15 @@ class Worker {
   constructor(logger) {
     this.status = 'stopped';
     let executableName = os.platform() === "darwin" ? 'v2ray' : 'v2ray.exe'
-    this.executablePath = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray', executableName).replace('app.asar', 'app.asar.unpacked')
+    if (global.ROOT.indexOf('app.asar') > 0) {
+      this.executableDirectory = path.join(global.ROOT, 'assets', 'v2ray', 'v2ray').replace('app.asar', 'app.asar.unpacked')
+    } else {
+      this.executableDirectory = path.join(global.ROOT, 'assets', 'v2ray', `v2ray-${os.platform() === "darwin" ? 'macos' : 'win'}`).replace('app.asar', 'app.asar.unpacked')
+    }
+    this.executablePath = path.join(this.executableDirectory, executableName)
     if (os.platform() === 'darwin') {
       exec(`chmod +x ${this.executablePath}`)
+      exec(`chmod +x ${path.join(this.executableDirectory, 'v2ctl')}`)
     }
     this.child = null
     this.logger = logger
