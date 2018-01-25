@@ -43,7 +43,10 @@
       "files": [
         "src/**",
         "assets/*",
-        "assets/v2ray/v2ray"
+        {
+          "from": "assets/v2ray/v2ray-macos",
+          "to": "assets/v2ray/v2ray"
+        }
       ]
     },
     "win": {
@@ -51,7 +54,10 @@
       "files": [
         "src/**",
         "assets/*",
-        "assets/v2ray/v2ray"
+        {
+          "from": "assets/v2ray/v2ray-win",
+          "to": "assets/v2ray/v2ray"
+        }
       ]
     }
   }
