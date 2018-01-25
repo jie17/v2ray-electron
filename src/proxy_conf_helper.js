@@ -1,9 +1,8 @@
 const {
-  exec, execFile
+  exec, execFileSync
 } = require('child_process')
 const {
-  app,
-  MenuItem
+  app, MenuItem, ipcMain
 } = require('electron')
 const path = require('path')
 const http = require('http')
@@ -30,6 +29,12 @@ class SystemProxy {
     else {
       this.setMode('standalone')
     }
+    ipcMain.on("reset pac", event => {
+      if (this.mode === 'pac') {
+        this.applyMode('standalone')
+        this.applyMode('pac')
+      }
+    })
   }
 
   installHelper() {
@@ -87,13 +92,13 @@ class SystemProxy {
     if (mode !== this.mode) {
       switch (mode) {
         case 'standalone':
-          execFile(realHelperPath, ["-m", "off"])
+          execFileSync(realHelperPath, ["-m", "off"])
           break
         case 'pac':
-          execFile(realHelperPath, ["-m", "auto", "-u", "http://localhost:22222/proxy.pac"])
+          execFileSync(realHelperPath, ["-m", "auto", "-u", "http://localhost:22222/proxy.pac"])
           break
         case 'global':
-          execFile(realHelperPath, ["-m", "global", "-p", "1080"])
+          execFileSync(realHelperPath, ["-m", "global", "-p", "1080"])
           break
       }
       this.applyModePacServer(mode)
@@ -119,7 +124,7 @@ class SystemProxy {
 
   turnOffSystemProxyIfEnabled() {
     if (this.mode !== 'standalone')
-      execFile(this.proxyConfHelperPath, ["-m", "off"])
+      execFileSync(this.proxyConfHelperPath, ["-m", "off"])
   }
 
   turnOffPacServer() {

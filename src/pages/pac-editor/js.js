@@ -30,7 +30,7 @@ function save() {
   })
 
   fs.writeFileSync(configPath, data, 'utf-8');
-  ipcRenderer.send("restart")
+  ipcRenderer.send("reset pac")
 }
 
 function loadDefault() {
