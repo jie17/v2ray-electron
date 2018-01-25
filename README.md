@@ -43,4 +43,6 @@ yarn dist
 - ~~Show log in app~~
 - ~~Support PAC file~~
 - Set up system proxy for Windows
-- Get root priviledge once for all
+- ~~Set root priviledge to proxy\_conf\_helper once for all~~
+- Improve switching profile experience
+- Detect port conflict of pac server
