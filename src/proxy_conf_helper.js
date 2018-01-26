@@ -21,12 +21,10 @@ class SystemProxy {
     this.bundledProxyConfHelperPath = path.join(global.ROOT, 'assets', 'proxy_conf_helper').replace('app.asar', 'app.asar.unpacked')
     this.installHelper()
     this.initializeMenuItems()
-    this.mode = store.get('proxy-mode')
-    if (this.mode) {
-      this.applyModePacServer(this.mode)
-      this.setMode(this.mode)
-    }
-    else {
+    let mode = store.get('proxy-mode')
+    if (mode) {
+      this.applyMode(mode)
+    } else {
       this.setMode('standalone')
     }
     ipcMain.on("reset pac", event => {
