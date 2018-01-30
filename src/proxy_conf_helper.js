@@ -59,21 +59,21 @@ class SystemProxy {
     me.menuItems = new Object()
     me.menuItems.standalone = new MenuItem({
       label: 'Standalone Mode',
-      type: "checkbox",
+      type: "radio",
       click(menuItem, browserWindow, event) {
         me.applyMode('standalone')
       }
     })
     me.menuItems.pac = new MenuItem({
       label: 'Pac Mode',
-      type: "checkbox",
+      type: "radio",
       click(menuItem, browserWindow, event) {
         me.applyMode('pac')
       }
     })
     me.menuItems.global = new MenuItem({
       label: 'Global Mode',
-      type: "checkbox",
+      type: "radio",
       click(menuItem, browserWindow, event) {
         me.applyMode('global')
       }
