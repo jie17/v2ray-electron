@@ -1,4 +1,4 @@
-const { execFile, exec } = require('child_process')
+const { spawn, exec } = require('child_process')
 const os = require('os')
 const fs = require('fs-extra')
 const path = require('path')
@@ -32,7 +32,7 @@ class Worker {
   start() {
     log.info("Starting worker ", this.executablePath)
     log.info("With config", this.configPath)
-    this.child = execFile(this.executablePath, ["-config", this.configPath])
+    this.child = spawn(this.executablePath, ["-config", this.configPath])
     this.child.stdout.on('data', data => {
       this.logger.append(data)
       })
