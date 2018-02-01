@@ -41,7 +41,7 @@ app.on('ready', () => {
   ]
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-  if (!process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'development') {
     autoUpdater.checkForUpdates();
   }
   if (os.platform() === 'darwin')
