@@ -11,6 +11,7 @@ const {Logger} = require('./logger')
 const os = require('os')
 const log = require('electron-log')
 const autoUpdater = require("electron-updater").autoUpdater
+const isDev = require('electron-is-dev');
 
 require('electron-debug')({showDevTools: true})
 log.transports.file.level = 'debug';
@@ -41,7 +42,7 @@ app.on('ready', () => {
   ]
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-  if (process.env.NODE_ENV !== 'development') {
+  if (!isDev) {
     autoUpdater.checkForUpdates();
   }
   if (os.platform() === 'darwin')
