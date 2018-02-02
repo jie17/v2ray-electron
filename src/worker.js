@@ -1,4 +1,4 @@
-const { spawn, exec } = require('child_process')
+const { spawn, execSync } = require('child_process')
 const os = require('os')
 const fs = require('fs-extra')
 const path = require('path')
@@ -16,8 +16,8 @@ class Worker {
     }
     this.executablePath = path.join(this.executableDirectory, executableName)
     if (os.platform() === 'darwin') {
-      exec(`chmod +x "${this.executablePath}"`)
-      exec(`chmod +x "${path.join(this.executableDirectory, 'v2ctl')}"`)
+      execSync(`chmod +x "${this.executablePath}"`)
+      execSync(`chmod +x "${path.join(this.executableDirectory, 'v2ctl')}"`)
     }
     this.child = null
     this.logger = logger
