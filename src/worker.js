@@ -16,8 +16,8 @@ class Worker {
     }
     this.executablePath = path.join(this.executableDirectory, executableName)
     if (os.platform() === 'darwin') {
-      exec(`chmod +x ${this.executablePath}`)
-      exec(`chmod +x ${path.join(this.executableDirectory, 'v2ctl')}`)
+      exec(`chmod +x "${this.executablePath}"`)
+      exec(`chmod +x "${path.join(this.executableDirectory, 'v2ctl')}"`)
     }
     this.child = null
     this.logger = logger
