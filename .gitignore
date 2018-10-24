@@ -65,3 +65,6 @@ v2ray
 
 # JetBrains
 .idea
+
+# mac
+.DS_Store
