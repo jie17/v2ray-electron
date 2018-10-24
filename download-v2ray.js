@@ -1,4 +1,4 @@
-let version = "v3.6";
+let version = "v3.48";
 
 const https = require('https');
 const fs = require('fs-extra');
@@ -77,7 +77,7 @@ function download(params) {
 
 function unzipAndMove(params) {
   fs.createReadStream(params.filename)
-  .pipe(unzipper.Extract({ path: process.cwd() }))
+  .pipe(unzipper.Extract({ path: `${process.cwd()}/${params.extract_dir}` }))
   .on('finish', () => {
     fs.renameSync(`./${params.extract_dir}/config.json`, `./${params.extract_dir}/config.json.default`);
     // Avoid "EPERM: operation not permitted" on Windows
