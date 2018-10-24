@@ -18,15 +18,15 @@
     "electron-is-dev": "^0.3.0",
     "electron-log": "^2.2.7",
     "electron-store": "^1.2.0",
-    "electron-updater": "^2.18.2",
+    "electron-updater": "^3.1.2",
     "fs-extra": "^4.0.0",
     "monaco-loader": "^0.8.2",
     "sudo-prompt": "^8.1.0"
   },
   "devDependencies": {
     "adm-zip": "^0.4.7",
-    "electron": "^1.7.10",
-    "electron-builder": "^19.6.3",
+    "electron": "^3.0.5",
+    "electron-builder": "^20.28.4",
     "request": "^2.81.0",
     "unzipper": "^0.8.11"
   },
