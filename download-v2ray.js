@@ -1,4 +1,4 @@
-let version = "v4.2";
+let version = "v4.10.0";
 
 const https = require('https');
 const fs = require('fs-extra');
