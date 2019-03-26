@@ -25,7 +25,7 @@ install:
 script:
   - node download-v2ray.js
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn dist; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn dist -- --win --mac; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn dist --win --mac; fi
 
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
