@@ -1,24 +1,22 @@
-const path = require("path");
-
-global.ROOT = path.join(__dirname, "..");
-
-const { app, Menu } = require("electron");
-const { initTray } = require("./tray");
-const { SystemProxy } = require("./proxy_conf_helper");
-const { Worker } = require("./worker");
-const { Logger } = require("./logger");
-const os = require("os");
-const log = require("electron-log");
-const autoUpdater = require("electron-updater").autoUpdater;
-const isDev = require("electron-is-dev");
+import path from "path";
+import { app, Menu } from "electron";
+import { initTray } from "./tray";
+import { SystemProxy } from "./proxy_conf_helper";
+import { Controller } from "./worker";
+import Logger from "./logger";
+import os from "os";
+import log from "electron-log";
+import { autoUpdater } from "electron-updater";
+import isDev from "electron-is-dev";
 
 require("electron-debug")({ showDevTools: true });
 log.transports.file.level = "debug";
-
-let tray = null;
+global.ROOT = isDev
+  ? path.join(__dirname, "..", "..")
+  : path.join(__dirname);
 let systemProxy = os.platform() === "darwin" ? new SystemProxy() : null;
 let logger = new Logger();
-let worker = new Worker(logger);
+let worker = new Controller(logger);
 
 app.on("ready", () => {
   log.info("App ready");
@@ -39,6 +37,7 @@ app.on("ready", () => {
       ]
     }
   ];
+  // @ts-ignore
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
   if (!isDev) {
@@ -75,3 +74,5 @@ autoUpdater.on("update-not-available", info => {
 autoUpdater.on("error", err => {
   setTimeout(() => autoUpdater.checkForUpdates(), 3600000);
 });
+
+log.catchErrors();
