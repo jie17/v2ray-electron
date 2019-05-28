@@ -1,12 +1,19 @@
-require('electron').ipcRenderer.on('log', (event, message) => {
+const MAX_LINE_NUMBER = 1024;
+let store = [];
+
+require("electron").ipcRenderer.on("log", (event, lines) => {
   let scrollEnd = isScrollEnd();
-  let div = document.getElementById('container')
-  div.innerHTML = div.innerHTML + message
+  let div = document.getElementById("container");
+  store = [...store, ...lines];
+  if (store.length > MAX_LINE_NUMBER) {
+    store = store.slice(store.length - MAX_LINE_NUMBER);
+  }
+  div.innerHTML = store.join("\n");
   if (scrollEnd) {
     let body = document.body;
     body.scrollTop = body.scrollHeight;
   }
-})
+});
 
 function isScrollEnd() {
   let body = document.body;
