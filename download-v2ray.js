@@ -46,7 +46,7 @@ function setPlatform(platform) {
 
 function switchIntoWorkSpace() {
   // Create v2ray if not exists and enter the folder
-  let dir = './assets/v2ray';
+  let dir = '../assets/v2ray';
   if (!fs.existsSync(dir)) {
     fs.ensureDirSync(dir);
   }
