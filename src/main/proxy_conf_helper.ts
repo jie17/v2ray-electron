@@ -9,9 +9,8 @@ const store = new Store<string>();
 
 class SystemProxy {
   private userDataPath: string;
-  private enabled: boolean;
   private mode: string;
-  private menuItems: {
+  public menuItems: {
     standalone: MenuItem;
     pac: MenuItem;
     global: MenuItem;
@@ -21,7 +20,6 @@ class SystemProxy {
   private pacPath: string;
   private proxyConfHelperPath: string;
   public constructor() {
-    this.enabled = false;
     this.pacServer = null;
     // @ts-ignore
     this.menuItems = {};
