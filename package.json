@@ -8,7 +8,8 @@
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist -c.compression=store -c.mac.identity=null"
+    "dist:dir": "yarn dist -c.compression=store -c.mac.identity=null",
+    "lint": "eslint --max-warnings 0 --ext .js --ext .ts ."
   },
   "license": "MIT",
   "dependencies": {
@@ -21,21 +22,26 @@
     "electron-updater": "^4.0.6",
     "fs-extra": "^4.0.0",
     "monaco-loader": "^0.8.2",
-    "sudo-prompt": "^8.1.0",
-    "source-map-support": "^0.5.10"
+    "source-map-support": "^0.5.10",
+    "sudo-prompt": "^8.1.0"
   },
   "devDependencies": {
+    "@types/auto-launch": "^5.0.1",
     "@types/node": "^10.14.4",
     "@types/semver": "^6.0.0",
-    "@types/auto-launch": "^5.0.1",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
     "adm-zip": "^0.4.7",
     "electron": "^5.0.2",
     "electron-builder": "^20.41.0",
     "electron-webpack": "^2.6.2",
     "electron-webpack-ts": "^3.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "prettier": "^1.17.1",
     "request": "^2.81.0",
-    "typescript": "^3.5.1",
+    "typescript": "~3.4.0",
     "unzipper": "^0.8.11",
     "webpack": "^4.32.2"
   },
