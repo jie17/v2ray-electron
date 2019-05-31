@@ -1,8 +1,8 @@
-const loader = require("monaco-loader");
-const fs = require("fs");
-const { process, remote, ipcRenderer } = require("electron");
-const path = require("path");
-const Store = require("electron-store");
+import loader from "monaco-loader";
+import fs from "fs";
+import { remote, ipcRenderer } from "electron";
+import path from "path";
+import Store from "electron-store";
 
 global.ROOT = path.join(__dirname, "..", "..", "..");
 vex.defaultOptions.className = "vex-theme-default";
@@ -16,19 +16,6 @@ let defaultConfigPath = path.join(
   "v2ray",
   "config.json.default"
 );
-
-loader().then(monaco => {
-  editor = monaco.editor.create(document.getElementById("container"), {
-    language: "json",
-    theme: "vs",
-    automaticLayout: true
-  });
-
-  let number = loadProfiles();
-  if (number) {
-    showProfile(0);
-  }
-});
 
 function loadProfiles() {
   let select = document.querySelector(".profiles");
@@ -47,21 +34,13 @@ function loadProfiles() {
   return profiles && profiles.length;
 }
 
-function showProfile(index) {
-  let profiles = store.get(V2RAY_PROFILE);
-  loadDataToEditor(profiles[index].value);
-}
-
 function loadDataToEditor(data) {
   editor.setModel(this.monaco.editor.createModel(data, "json"));
 }
 
-function saveProfile() {
-  let data = readProfileFromEditor();
+function showProfile(index) {
   let profiles = store.get(V2RAY_PROFILE);
-  let index = document.querySelector(".profiles").value;
-  profiles[index].value = data;
-  store.set(V2RAY_PROFILE, profiles);
+  loadDataToEditor(profiles[index].value);
 }
 
 function readProfileFromEditor() {
@@ -75,6 +54,16 @@ function readProfileFromEditor() {
   return data;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function saveProfile() {
+  let data = readProfileFromEditor();
+  let profiles = store.get(V2RAY_PROFILE);
+  let index = document.querySelector(".profiles").value;
+  profiles[index].value = data;
+  store.set(V2RAY_PROFILE, profiles);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function loadDefault() {
   fs.readFile(defaultConfigPath, "utf-8", (err, data) => {
     loadDataToEditor(data);
@@ -116,10 +105,23 @@ document.querySelector(".rename-profile").addEventListener("click", () => {
   });
 });
 
+loader().then(monaco => {
+  editor = monaco.editor.create(document.getElementById("container"), {
+    language: "json",
+    theme: "vs",
+    automaticLayout: true
+  });
+
+  let number = loadProfiles();
+  if (number) {
+    showProfile(0);
+  }
+});
+
 document.querySelector(".delete-profile").addEventListener("click", () => {
   vex.dialog.confirm({
     message: "Delete",
-    callback: function(value) {
+    callback: function() {
       let profiles = store.get(V2RAY_PROFILE);
       let index = document.querySelector(".profiles").value;
       profiles.splice(index, 1);

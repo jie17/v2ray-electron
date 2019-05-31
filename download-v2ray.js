@@ -1,45 +1,38 @@
 const version = "v4.18.0";
 
-const https = require("https");
-const fs = require("fs-extra");
-const os = require("os");
-const request = require("request");
-const unzipper = require("unzipper");
-
-switchIntoWorkSpace();
-
-if (runningOnTravis()) {
-  ["win32", "darwin"].forEach(platform => runTaskOnPlatform(platform));
-} else {
-  runTaskOnPlatform(os.platform());
-}
-
-function runTaskOnPlatform(platform) {
-  let params = setPlatform(platform);
-  cleanUpOldFiles(params);
-  if (!alreadyExists(params)) {
-    download(params);
-  } else {
-    unzipAndMove(params);
-  }
-}
+import fs from "fs-extra";
+import os from "os";
+import request from "request";
+import unzipper from "unzipper";
 
 function setPlatform(platform) {
   if (platform === "win32") {
     let url = `https://github.com/v2ray/v2ray-core/releases/download/${version}/v2ray-windows-64.zip`;
     let filename = `v2ray-${version}-windows-64.zip`;
-    let extract_dir = `v2ray-${version}-windows-64`;
-    let target_dir = "v2ray-win";
-    let executable_name = "v2ray.exe";
-    return { url, filename, extract_dir, target_dir, executable_name };
+    let extractDir = `v2ray-${version}-windows-64`;
+    let targetDir = "v2ray-win";
+    let executableName = "v2ray.exe";
+    return {
+      url,
+      filename,
+      extractDir: extractDir,
+      targetDir: targetDir,
+      executableName
+    };
   }
   if (platform === "darwin") {
     let url = `https://github.com/v2ray/v2ray-core/releases/download/${version}/v2ray-macos.zip`;
     let filename = `v2ray-${version}-macos.zip`;
-    let extract_dir = `v2ray-${version}-macos`;
-    let target_dir = "v2ray-macos";
-    let executable_name = "v2ray";
-    return { url, filename, extract_dir, target_dir, executable_name };
+    let extractDir = `v2ray-${version}-macos`;
+    let targetDir = "v2ray-macos";
+    let executableName = "v2ray";
+    return {
+      url,
+      filename,
+      extractDir: extractDir,
+      targetDir: targetDir,
+      executableName
+    };
   }
 }
 
@@ -52,19 +45,34 @@ function switchIntoWorkSpace() {
   process.chdir(dir);
 }
 
+function removeIfExists(path) {
+  if (fs.existsSync(path)) {
+    fs.removeSync(path);
+  }
+}
+
 function cleanUpOldFiles(params) {
-  removeIfExists(params.target_dir);
-  removeIfExists(params.extract_dir);
+  removeIfExists(params.targetDir);
+  removeIfExists(params.extractDir);
 }
 
 function alreadyExists(params) {
   return fs.existsSync(params.filename);
 }
 
-function removeIfExists(path) {
-  if (fs.existsSync(path)) {
-    fs.removeSync(path);
-  }
+function unzipAndMove(params) {
+  fs.createReadStream(params.filename)
+    .pipe(unzipper.Extract({ path: `${process.cwd()}/${params.extractDir}` }))
+    .on("finish", () => {
+      fs.renameSync(
+        `./${params.extractDir}/config.json`,
+        `./${params.extractDir}/config.json.default`
+      );
+      // Avoid "EPERM: operation not permitted" on Windows
+      setTimeout(function() {
+        fs.renameSync(`./${params.extractDir}`, `./${params.targetDir}`);
+      }, 1000);
+    });
 }
 
 function download(params) {
@@ -76,21 +84,24 @@ function download(params) {
     });
 }
 
-function unzipAndMove(params) {
-  fs.createReadStream(params.filename)
-    .pipe(unzipper.Extract({ path: `${process.cwd()}/${params.extract_dir}` }))
-    .on("finish", () => {
-      fs.renameSync(
-        `./${params.extract_dir}/config.json`,
-        `./${params.extract_dir}/config.json.default`
-      );
-      // Avoid "EPERM: operation not permitted" on Windows
-      setTimeout(function() {
-        fs.renameSync(`./${params.extract_dir}`, `./${params.target_dir}`);
-      }, 1000);
-    });
+function runTaskOnPlatform(platform) {
+  let params = setPlatform(platform);
+  cleanUpOldFiles(params);
+  if (!alreadyExists(params)) {
+    download(params);
+  } else {
+    unzipAndMove(params);
+  }
 }
 
 function runningOnTravis() {
   return "TRAVIS" in process.env && "CI" in process.env;
+}
+
+switchIntoWorkSpace();
+
+if (runningOnTravis()) {
+  ["win32", "darwin"].forEach(platform => runTaskOnPlatform(platform));
+} else {
+  runTaskOnPlatform(os.platform());
 }

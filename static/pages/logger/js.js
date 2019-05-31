@@ -1,6 +1,11 @@
 const MAX_LINE_NUMBER = 1024;
 let store = [];
 
+function isScrollEnd() {
+  let body = document.body;
+  return body.scrollTop + body.clientHeight === body.scrollHeight;
+}
+
 require("electron").ipcRenderer.on("log", (event, lines) => {
   let scrollEnd = isScrollEnd();
   let div = document.getElementById("container");
@@ -14,8 +19,3 @@ require("electron").ipcRenderer.on("log", (event, lines) => {
     body.scrollTop = body.scrollHeight;
   }
 });
-
-function isScrollEnd() {
-  let body = document.body;
-  return body.scrollTop + body.clientHeight === body.scrollHeight;
-}
