@@ -4,16 +4,16 @@ const MAX_LINE_NUMBER = 1024;
 declare const __static: string;
 
 export default class Logger {
-  store: Array<String>;
-  windowOpen: boolean;
-  win: null | BrowserWindow;
-  constructor() {
+  private store: string[];
+  private windowOpen: boolean;
+  private win: null | BrowserWindow;
+  public constructor() {
     this.store = [];
     this.windowOpen = false;
     this.win = null;
   }
 
-  append(data: Buffer) {
+  public append(data: Buffer): void {
     let lines = data.toString().split("\n");
     if (lines.length > 0 && lines[lines.length - 1] === "") {
       lines.pop();
@@ -27,7 +27,7 @@ export default class Logger {
     }
   }
 
-  showWindow() {
+  public showWindow(): void {
     if (!this.win) {
       this.win = new BrowserWindow({
         width: 800,
@@ -35,18 +35,24 @@ export default class Logger {
         title: "Log Viewer - V2Ray Electron",
         webPreferences: { nodeIntegration: true }
       });
-      this.win.on("closed", () => {
-        this.win = null;
-        this.windowOpen = false;
-      });
+      this.win.on(
+        "closed",
+        (): void => {
+          this.win = null;
+          this.windowOpen = false;
+        }
+      );
 
       this.win.setMenu(null);
       this.win.loadURL(
         `file://${path.join(__static, "pages", "logger", "index.html")}`
       );
-      this.win.webContents.on("did-finish-load", () => {
-        if (this.win) this.win.webContents.send("log", this.store);
-      });
+      this.win.webContents.on(
+        "did-finish-load",
+        (): void => {
+          if (this.win) this.win.webContents.send("log", this.store);
+        }
+      );
       this.windowOpen = true;
     } else {
       this.win.focus();

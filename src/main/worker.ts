@@ -1,22 +1,20 @@
 import Logger from "./logger";
 import { ChildProcess } from "child_process";
-const { spawn, execSync } = require("child_process");
-const os = require("os");
-const fs = require("fs-extra");
-const path = require("path");
-const { app, ipcMain } = require("electron");
-const log = require("electron-log");
+import { spawn, execSync } from "child_process";
+import os from "os";
+import fs from "fs-extra";
+import path from "path";
+import { app, ipcMain } from "electron";
+import log from "electron-log";
 
 class Controller {
-  status: string;
-  executableDirectory: string;
-  executablePath: string;
-  child: null | ChildProcess;
-  logger: Logger;
-  userDataPath: string;
-  configPath: string;
-  constructor(logger: Logger) {
-    this.status = "stopped";
+  private executableDirectory: string;
+  private executablePath: string;
+  private child: null | ChildProcess;
+  private logger: Logger;
+  private userDataPath: string;
+  private configPath: string;
+  public constructor(logger: Logger) {
     let executableName = os.platform() === "darwin" ? "v2ray" : "v2ray.exe";
     if (global.ROOT.indexOf("app.asar") > 0) {
       this.executableDirectory = path
@@ -42,36 +40,45 @@ class Controller {
     this.userDataPath = app.getPath("userData");
     this.configPath = path.join(this.userDataPath, "v2ray.json");
     this.initConfig();
-    ipcMain.on("restart", () => {
-      this.restart();
-    });
+    ipcMain.on(
+      "restart",
+      (): void => {
+        this.restart();
+      }
+    );
   }
 
-  start() {
+  public start(): void {
     log.info("Starting worker ", this.executablePath);
     log.info("With config", this.configPath);
     this.child = spawn(this.executablePath, ["-config", this.configPath]);
     if (this.child) {
-      this.child.stdout.on("data", data => {
-        this.logger.append(data);
-      });
-      this.child.stderr.on("data", data => {
-        this.logger.append(data);
-      });
+      this.child.stdout.on(
+        "data",
+        (data): void => {
+          this.logger.append(data);
+        }
+      );
+      this.child.stderr.on(
+        "data",
+        (data): void => {
+          this.logger.append(data);
+        }
+      );
     }
   }
 
-  restart() {
+  public restart(): void {
     log.info("Restarting worker ", this.executablePath);
     this.child && this.child.kill();
     this.start();
   }
 
-  stop() {
+  public stop(): void {
     this.child && this.child.kill();
   }
 
-  initConfig() {
+  private initConfig(): void {
     if (!fs.existsSync(this.configPath)) {
       log.info("Config file not exists. Copying from default config file.");
       let defaultConfigPath = path.join(

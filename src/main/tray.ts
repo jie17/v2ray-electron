@@ -13,7 +13,7 @@ function initTray(
   worker: Controller,
   logger: Logger,
   systemProxy: SystemProxy | null
-) {
+): void {
   const tray = new Tray(
     path.join(global.ROOT, "assets", `icon-${os.platform()}.png`)
   );
@@ -39,7 +39,7 @@ function initTray(
   contextMenu.append(
     new MenuItem({
       label: "Restart V2Ray",
-      click() {
+      click(): void {
         worker.restart();
       }
     })
@@ -48,21 +48,25 @@ function initTray(
   let menuForAutoStart = new MenuItem({
     label: "Start on Boot",
     type: "checkbox",
-    click: () => {
-      autoStart.toggle().then(isEnabled => {
-        menuForAutoStart.checked = isEnabled;
-      });
+    click: (): void => {
+      autoStart.toggle().then(
+        (isEnabled): void => {
+          menuForAutoStart.checked = isEnabled;
+        }
+      );
     }
   });
   contextMenu.append(menuForAutoStart);
-  autoStart
-    .isEnabled()
-    .then(isEnabled => (menuForAutoStart.checked = isEnabled));
+  autoStart.isEnabled().then(
+    (isEnabled): void => {
+      menuForAutoStart.checked = isEnabled;
+    }
+  );
 
   contextMenu.append(
     new MenuItem({
       label: "Edit V2Ray Config",
-      click() {
+      click(): void {
         configEditor.launch();
       }
     })
@@ -72,7 +76,7 @@ function initTray(
     contextMenu.append(
       new MenuItem({
         label: "Edit PAC File",
-        click() {
+        click(): void {
           pacEditor.launch();
         }
       })
@@ -82,7 +86,7 @@ function initTray(
   contextMenu.append(
     new MenuItem({
       label: "Show V2Ray Log",
-      click() {
+      click(): void {
         logger.showWindow();
       }
     })
@@ -91,9 +95,11 @@ function initTray(
   contextMenu.append(
     new MenuItem({
       label: `About ${app.getName()}`,
-      click(item, focusedWindow) {
+      click(): void {
         openAboutWindow({
+          /*eslint-disable */
           icon_path: path.join(__dirname, "assets", "icon-win32.png")
+          /*eslint-enable */
         });
       }
     })

@@ -2,12 +2,12 @@ import { BrowserWindow } from "electron";
 declare const __static: string;
 
 class ConfigEditor {
-  win: null | BrowserWindow;
-  constructor() {
+  private win: null | BrowserWindow;
+  public constructor() {
     this.win = null;
   }
 
-  launch() {
+  public launch(): void {
     if (!this.win) {
       this.win = new BrowserWindow({
         width: 800,
@@ -15,9 +15,12 @@ class ConfigEditor {
         title: "Configuration Editor - V2Ray Electron",
         webPreferences: { nodeIntegration: true }
       });
-      this.win.on("closed", () => {
-        this.win = null;
-      });
+      this.win.on(
+        "closed",
+        (): void => {
+          this.win = null;
+        }
+      );
 
       this.win.setMenu(null);
       this.win.loadURL(`file://${__static}/pages/config-editor/index.html`);

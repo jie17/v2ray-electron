@@ -8,21 +8,21 @@ import Store from "electron-store";
 const store = new Store<string>();
 
 class SystemProxy {
-  userDataPath: string;
-  enabled: boolean;
-  mode: string;
-  menuItems: {
+  private userDataPath: string;
+  private enabled: boolean;
+  private mode: string;
+  private menuItems: {
     standalone: MenuItem;
     pac: MenuItem;
     global: MenuItem;
   };
-  pac_server: Server | null;
-  bundledProxyConfHelperPath: string;
-  pacPath: string;
-  proxyConfHelperPath: string;
-  constructor() {
+  private pacServer: Server | null;
+  private bundledProxyConfHelperPath: string;
+  private pacPath: string;
+  private proxyConfHelperPath: string;
+  public constructor() {
     this.enabled = false;
-    this.pac_server = null;
+    this.pacServer = null;
     // @ts-ignore
     this.menuItems = {};
     this.mode = "";
@@ -43,16 +43,19 @@ class SystemProxy {
     } else {
       this.setMode("standalone");
     }
-    ipcMain.on("reset pac", () => {
-      if (this.mode === "pac") {
-        this.applyMode("standalone");
-        this.applyMode("pac");
+    ipcMain.on(
+      "reset pac",
+      (): void => {
+        if (this.mode === "pac") {
+          this.applyMode("standalone");
+          this.applyMode("pac");
+        }
       }
-    });
+    );
   }
 
-  installHelper() {
-    console.log('path', this.proxyConfHelperPath);
+  private installHelper(): void {
+    console.log("path", this.proxyConfHelperPath);
     if (!fs.existsSync(this.proxyConfHelperPath)) {
       let options = {
         name: app.getName(),
@@ -63,44 +66,48 @@ class SystemProxy {
       }" && chown root:admin "${this.proxyConfHelperPath}" && chmod a+rx "${
         this.proxyConfHelperPath
       }" && chmod +s "${this.proxyConfHelperPath}"`;
-      sudo.exec(command, options, (error: Error) => {
-        if (error) {
-          console.error(error);
-        } else {
-          console.log("Successfully installed helper");
+      sudo.exec(
+        command,
+        options,
+        (error: Error): void => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log("Successfully installed helper");
+          }
         }
-      });
+      );
     }
   }
 
-  initializeMenuItems() {
+  private initializeMenuItems(): void {
     let me = this;
     me.menuItems = {
       standalone: new MenuItem({
         label: "Standalone Mode",
         type: "radio",
-        click(menuItem, browserWindow, event) {
+        click(): void {
           me.applyMode("standalone");
         }
       }),
       pac: new MenuItem({
         label: "Pac Mode",
         type: "radio",
-        click(menuItem, browserWindow, event) {
+        click(): void {
           me.applyMode("pac");
         }
       }),
       global: new MenuItem({
         label: "Global Mode",
         type: "radio",
-        click(menuItem, browserWindow, event) {
+        click(): void {
           me.applyMode("global");
         }
       })
     };
   }
 
-  applyMode(mode: string) {
+  private applyMode(mode: string): void {
     let realHelperPath;
     if (fs.existsSync(this.proxyConfHelperPath)) {
       realHelperPath = this.proxyConfHelperPath;
@@ -127,7 +134,7 @@ class SystemProxy {
     this.setMode(mode);
   }
 
-  applyModePacServer(mode: string) {
+  private applyModePacServer(mode: string): void {
     if (mode === "pac") {
       this.turnOnPacServer();
     } else {
@@ -135,33 +142,35 @@ class SystemProxy {
     }
   }
 
-  setMode(mode: string) {
+  public setMode(mode: string): void {
     this.mode = mode;
     Object.values(this.menuItems).forEach(
-      menuItem => (menuItem.checked = false)
+      (menuItem): void => {
+        menuItem.checked = false;
+      }
     );
     // @ts-ignore
     this.menuItems[this.mode].checked = true;
     store.set("proxy-mode", mode);
   }
 
-  turnOffSystemProxyIfEnabled() {
+  public turnOffSystemProxyIfEnabled(): void {
     if (this.mode !== "standalone")
       execFileSync(this.proxyConfHelperPath, ["-m", "off"]);
   }
 
-  turnOffPacServer() {
-    if (this.pac_server) {
-      this.pac_server.close();
-      this.pac_server = null;
+  private turnOffPacServer(): void {
+    if (this.pacServer) {
+      this.pacServer.close();
+      this.pacServer = null;
     }
   }
 
-  turnOnPacServer() {
+  private turnOnPacServer(): void {
     let pacPath = this.pacPath;
-    this.pac_server = http
-      .createServer(function(req, res) {
-        fs.readFile(pacPath, function(err, file) {
+    this.pacServer = http
+      .createServer(function(req, res): void {
+        fs.readFile(pacPath, function(err, file): void {
           if (err) {
             res.writeHead(500, {
               "Content-Type": "text/plain"
