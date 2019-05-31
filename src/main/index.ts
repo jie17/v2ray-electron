@@ -15,6 +15,7 @@ global.ROOT = isDev ? path.join(__dirname, "..", "..") : path.join(__dirname);
 let systemProxy = os.platform() === "darwin" ? new SystemProxy() : null;
 let logger = new Logger();
 let worker = new Controller(logger);
+let tray = null;
 
 app.on(
   "ready",
@@ -44,7 +45,8 @@ app.on(
       autoUpdater.checkForUpdates();
     }
     if (os.platform() === "darwin") app.dock.hide();
-    initTray(worker, logger, systemProxy);
+    tray = initTray(worker, logger, systemProxy);
+    tray.setToolTip("V2Ray");
   }
 );
 

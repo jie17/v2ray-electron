@@ -13,11 +13,10 @@ function initTray(
   worker: Controller,
   logger: Logger,
   systemProxy: SystemProxy | null
-): void {
+): Tray {
   const tray = new Tray(
     path.join(global.ROOT, "assets", `icon-${os.platform()}.png`)
   );
-  console.log(tray);
   let autoStart = new AutoStart();
   let contextMenu = new Menu();
   let configEditor = new ConfigEditor();
@@ -111,10 +110,11 @@ function initTray(
     })
   );
 
-  tray.setToolTip("V2Ray");
   tray.setContextMenu(contextMenu);
 
   worker.start();
+
+  return tray;
 }
 
 export { initTray };
