@@ -1,5 +1,8 @@
 import { BrowserWindow } from "electron";
-declare const __static: string;
+import { format as formatUrl } from "url";
+import * as path from "path";
+
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 class PacEditor {
   private win: null | BrowserWindow;
@@ -23,7 +26,22 @@ class PacEditor {
       );
 
       this.win.setMenu(null);
-      this.win.loadURL(`file://${__static}/pages/pac-editor/index.html`);
+      if (isDevelopment) {
+        this.win.loadURL(
+          `http://localhost:${
+            process.env.ELECTRON_WEBPACK_WDS_PORT
+          }?route=pacEditor`
+        );
+      } else {
+        this.win.loadURL(
+          formatUrl({
+            pathname: path.join(__dirname, "index.html"),
+            protocol: "file",
+            slashes: true,
+            query: { route: "pacEditor" }
+          })
+        );
+      }
     } else {
       this.win.focus();
     }

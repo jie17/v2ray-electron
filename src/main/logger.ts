@@ -1,16 +1,19 @@
 import { BrowserWindow } from "electron";
 import * as path from "path";
+import { format as formatUrl } from "url";
 const MAX_LINE_NUMBER = 1024;
-declare const __static: string;
+
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 export default class Logger {
-  private store: string[];
   private windowOpen: boolean;
   private win: null | BrowserWindow;
+  private logId: number;
   public constructor() {
-    this.store = [];
+    global.store = [];
     this.windowOpen = false;
     this.win = null;
+    this.logId = 0;
   }
 
   public append(data: Buffer): void {
@@ -18,9 +21,12 @@ export default class Logger {
     if (lines.length > 0 && lines[lines.length - 1] === "") {
       lines.pop();
     }
-    this.store = [...this.store, ...lines];
-    if (this.store.length > MAX_LINE_NUMBER) {
-      this.store = this.store.slice(this.store.length - MAX_LINE_NUMBER);
+    global.store = [
+      ...global.store,
+      ...lines.map((line): LogLine => ({ line, id: this.logId++ }))
+    ];
+    if (global.store.length > MAX_LINE_NUMBER) {
+      global.store = global.store.slice(global.store.length - MAX_LINE_NUMBER);
     }
     if (this.windowOpen) {
       this.win && this.win.webContents.send("log", lines);
@@ -44,15 +50,22 @@ export default class Logger {
       );
 
       this.win.setMenu(null);
-      this.win.loadURL(
-        `file://${path.join(__static, "pages", "logger", "index.html")}`
-      );
-      this.win.webContents.on(
-        "did-finish-load",
-        (): void => {
-          if (this.win) this.win.webContents.send("log", this.store);
-        }
-      );
+      if (isDevelopment) {
+        this.win.loadURL(
+          `http://localhost:${
+            process.env.ELECTRON_WEBPACK_WDS_PORT
+          }?route=logViewer`
+        );
+      } else {
+        this.win.loadURL(
+          formatUrl({
+            pathname: path.join(__dirname, "index.html"),
+            protocol: "file",
+            slashes: true,
+            query: { route: "logViewer" }
+          })
+        );
+      }
       this.windowOpen = true;
     } else {
       this.win.focus();
