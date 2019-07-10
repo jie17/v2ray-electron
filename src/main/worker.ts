@@ -1,14 +1,14 @@
 import Logger from "./logger";
 import { ChildProcess } from "child_process";
 import { spawn, execSync } from "child_process";
-import os from "os";
 import fs from "fs-extra";
 import path from "path";
 import { app, ipcMain } from "electron";
 import log from "electron-log";
+import os from "os";
+import { getV2RayAsset } from "./util";
 
 class Controller {
-  private executableDirectory: string;
   private executablePath: string;
   private child: null | ChildProcess;
   private logger: Logger;
@@ -16,24 +16,10 @@ class Controller {
   private configPath: string;
   public constructor(logger: Logger) {
     let executableName = os.platform() === "darwin" ? "v2ray" : "v2ray.exe";
-    if (global.ROOT.indexOf("app.asar") > 0) {
-      this.executableDirectory = path
-        .join(global.ROOT, "assets", "v2ray", "v2ray")
-        .replace("app.asar", "app.asar.unpacked");
-    } else {
-      this.executableDirectory = path
-        .join(
-          global.ROOT,
-          "assets",
-          "v2ray",
-          `v2ray-${os.platform() === "darwin" ? "macos" : "win"}`
-        )
-        .replace("app.asar", "app.asar.unpacked");
-    }
-    this.executablePath = path.join(this.executableDirectory, executableName);
+    this.executablePath = getV2RayAsset(executableName);
     if (os.platform() === "darwin") {
       execSync(`chmod +x "${this.executablePath}"`);
-      execSync(`chmod +x "${path.join(this.executableDirectory, "v2ctl")}"`);
+      execSync(`chmod +x "${getV2RayAsset("v2ctl")}"`);
     }
     this.child = null;
     this.logger = logger;
@@ -81,13 +67,7 @@ class Controller {
   private initConfig(): void {
     if (!fs.existsSync(this.configPath)) {
       log.info("Config file not exists. Copying from default config file.");
-      let defaultConfigPath = path.join(
-        global.ROOT,
-        "assets",
-        "v2ray",
-        `v2ray-${os.platform() === "darwin" ? "macos" : "win"}`,
-        "config.json.default"
-      );
+      const defaultConfigPath = getV2RayAsset("config.json.default");
       fs.copySync(defaultConfigPath, this.configPath);
     }
   }

@@ -3,25 +3,17 @@ import fs from "fs";
 import { remote, ipcRenderer } from "electron";
 import AceEditor from "react-ace";
 import path from "path";
-import * as os from "os";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import { getV2RayAsset } from "./util";
 
 import "brace/mode/json";
 import "brace/theme/github";
 
 let configPath = path.join(remote.app.getPath("userData"), "v2ray.json");
-let defaultConfigPath = path.join(
-  __dirname,
-  "..",
-  "..",
-  "assets",
-  "v2ray",
-  `v2ray-${os.platform() === "win32" ? "win" : "macos"}`,
-  "config.json.default"
-);
+let defaultConfigPath = getV2RayAsset("config.json.default");
 
 const ConfigEditor: React.FC = () => {
   const [pac, setPac] = useState<string>();
@@ -54,12 +46,7 @@ const ConfigEditor: React.FC = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <AceEditor
-        mode="json"
-        theme="github"
-        onChange={onChange}
-        value={pac}
-      />
+      <AceEditor mode="json" theme="github" onChange={onChange} value={pac} />
     </Container>
   );
 };

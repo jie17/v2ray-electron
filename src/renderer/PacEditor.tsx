@@ -7,18 +7,14 @@ import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import isDev from "electron-is-dev";
 
 import "brace/mode/javascript";
 import "brace/theme/github";
 
 let configPath = path.join(remote.app.getPath("userData"), "proxy.pac");
-let defaultConfigPath = path.join(
-  __dirname,
-  "..",
-  "..",
-  "assets",
-  "proxy.pac.default"
-);
+const root = isDev ? path.join(__dirname, "..", "..") : path.join(__dirname);
+let defaultConfigPath = path.join(root, "assets", "proxy.pac.default");
 
 const PacEditor: React.FC = () => {
   const [pac, setPac] = useState<string>();
