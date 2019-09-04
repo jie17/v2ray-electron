@@ -24,7 +24,7 @@ class AutoStart {
         } else {
           this.autoLauncher.enable();
         }
-        return isEnabled;
+        return !isEnabled;
       }
     );
   }
