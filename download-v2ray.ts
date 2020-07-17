@@ -1,9 +1,9 @@
 import * as os from "os";
-import * as request from "request";
+import fetch from "node-fetch";
 import * as fs from "fs-extra";
 import { Extract } from "unzipper";
 
-const version = "v4.18.0";
+const version = "v4.26.0";
 
 interface Params {
   url: string;
@@ -25,7 +25,7 @@ function setPlatform(platform: NodeJS.Platform): Params | null {
       filename,
       extractDir: extractDir,
       targetDir: targetDir,
-      executableName
+      executableName,
     };
   }
   if (platform === "darwin") {
@@ -39,7 +39,7 @@ function setPlatform(platform: NodeJS.Platform): Params | null {
       filename,
       extractDir: extractDir,
       targetDir: targetDir,
-      executableName
+      executableName,
     };
   }
   return null;
@@ -72,31 +72,29 @@ function alreadyExists(params: Params): boolean {
 function unzipAndMove(params: Params): void {
   fs.createReadStream(params.filename)
     .pipe(Extract({ path: `${process.cwd()}/${params.extractDir}` }))
-    .on(
-      "finish",
-      (): void => {
-        fs.renameSync(
-          `./${params.extractDir}/config.json`,
-          `./${params.extractDir}/config.json.default`
-        );
-        // Avoid "EPERM: operation not permitted" on Windows
-        setTimeout(function(): void {
-          fs.renameSync(`./${params.extractDir}`, `./${params.targetDir}`);
-        }, 1000);
-      }
-    );
+    .on("finish", (): void => {
+      fs.renameSync(
+        `./${params.extractDir}/config.json`,
+        `./${params.extractDir}/config.json.default`
+      );
+      // Avoid "EPERM: operation not permitted" on Windows
+      setTimeout(function (): void {
+        fs.renameSync(`./${params.extractDir}`, `./${params.targetDir}`);
+      }, 1000);
+    });
 }
 
-function download(params: Params): void {
+async function download(params: Params): Promise<void> {
   console.log("Downloading ", params.url);
-  request(params.url)
-    .pipe(fs.createWriteStream(params.filename))
-    .on(
-      "finish",
-      (): void => {
-        unzipAndMove(params);
-      }
-    );
+  const res = await fetch(params.url);
+  const fileStream = fs.createWriteStream(params.filename);
+  await new Promise((resolve) => {
+    res.body.pipe(fileStream);
+    fileStream.on("finish", function () {
+      unzipAndMove(params);
+      resolve();
+    });
+  });
 }
 
 function runTaskOnPlatform(platform: NodeJS.Platform): void {

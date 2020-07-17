@@ -16,8 +16,8 @@ let configPath = path.join(remote.app.getPath("userData"), "v2ray.json");
 let defaultConfigPath = getV2RayAsset("config.json.default");
 
 const ConfigEditor: React.FC = () => {
-  const [pac, setPac] = useState<string>();
-  const onChange = useCallback(value => {
+  const [pac, setPac] = useState<string>("");
+  const onChange = useCallback((value) => {
     setPac(value);
   }, []);
   const loadDefault = useCallback(() => {

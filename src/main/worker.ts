@@ -26,12 +26,9 @@ class Controller {
     this.userDataPath = app.getPath("userData");
     this.configPath = path.join(this.userDataPath, "v2ray.json");
     this.initConfig();
-    ipcMain.on(
-      "restart",
-      (): void => {
-        this.restart();
-      }
-    );
+    ipcMain.on("restart", (): void => {
+      this.restart();
+    });
   }
 
   public start(): void {
@@ -39,18 +36,12 @@ class Controller {
     log.info("With config", this.configPath);
     this.child = spawn(this.executablePath, ["-config", this.configPath]);
     if (this.child) {
-      this.child.stdout.on(
-        "data",
-        (data): void => {
-          this.logger.append(data);
-        }
-      );
-      this.child.stderr.on(
-        "data",
-        (data): void => {
-          this.logger.append(data);
-        }
-      );
+      this.child.stdout?.on("data", (data): void => {
+        this.logger.append(data);
+      });
+      this.child.stderr?.on("data", (data): void => {
+        this.logger.append(data);
+      });
     }
   }
 

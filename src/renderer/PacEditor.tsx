@@ -17,8 +17,8 @@ const root = isDev ? path.join(__dirname, "..", "..") : path.join(__dirname);
 let defaultConfigPath = path.join(root, "assets", "proxy.pac.default");
 
 const PacEditor: React.FC = () => {
-  const [pac, setPac] = useState<string>();
-  const onChange = useCallback(value => {
+  const [pac, setPac] = useState<string>("");
+  const onChange = useCallback((value) => {
     setPac(value);
   }, []);
   const loadDefault = useCallback(() => {
