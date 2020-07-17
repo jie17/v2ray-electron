@@ -17,7 +17,9 @@ jobs:
       - run: yarn dist
         # env:
         #   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: artifact
-          path: dist
+          path: |
+            dist/*.dmg
+            dist/*.exe
