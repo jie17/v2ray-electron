@@ -29,22 +29,22 @@ class SystemProxy {
         type: "radio",
         click: () => {
           this.applyMode("standalone");
-        }
+        },
       }),
       pac: new MenuItem({
         label: "Pac Mode",
         type: "radio",
         click: () => {
           this.applyMode("pac");
-        }
+        },
       }),
       global: new MenuItem({
         label: "Global Mode",
         type: "radio",
         click: () => {
           this.applyMode("global");
-        }
-      })
+        },
+      }),
     };
     this.userDataPath = app.getPath("userData");
     this.pacPath = path.join(this.userDataPath, "proxy.pac");
@@ -62,15 +62,12 @@ class SystemProxy {
     } else {
       this.setMode("standalone");
     }
-    ipcMain.on(
-      "reset pac",
-      (): void => {
-        if (this.mode === "pac") {
-          this.applyMode("standalone");
-          this.applyMode("pac");
-        }
+    ipcMain.on("reset pac", (): void => {
+      if (this.mode === "pac") {
+        this.applyMode("standalone");
+        this.applyMode("pac");
       }
-    );
+    });
   }
 
   private installHelper(): void {
@@ -78,24 +75,16 @@ class SystemProxy {
     if (!fs.existsSync(this.proxyConfHelperPath)) {
       let options = {
         name: app.getName(),
-        icns: path.join(global.ROOT, "assets", "icon.icns")
+        icns: path.join(global.ROOT, "assets", "icon.icns"),
       };
-      let command = `cp "${this.bundledProxyConfHelperPath}" "${
-        this.proxyConfHelperPath
-      }" && chown root:admin "${this.proxyConfHelperPath}" && chmod a+rx "${
-        this.proxyConfHelperPath
-      }" && chmod +s "${this.proxyConfHelperPath}"`;
-      sudo.exec(
-        command,
-        options,
-        (error: Error): void => {
-          if (error) {
-            console.error(error);
-          } else {
-            console.log("Successfully installed helper");
-          }
+      let command = `cp "${this.bundledProxyConfHelperPath}" "${this.proxyConfHelperPath}" && chown root:admin "${this.proxyConfHelperPath}" && chmod a+rx "${this.proxyConfHelperPath}" && chmod +s "${this.proxyConfHelperPath}"`;
+      sudo.exec(command, options, (error: Error): void => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log("Successfully installed helper");
         }
-      );
+      });
     }
   }
 
@@ -113,7 +102,7 @@ class SystemProxy {
               "-m",
               "auto",
               "-u",
-              "http://localhost:22222/proxy.pac"
+              "http://localhost:22222/proxy.pac",
             ]);
             break;
           case "global":
@@ -136,11 +125,9 @@ class SystemProxy {
 
   public setMode(mode: Mode): void {
     this.mode = mode;
-    Object.values(this.menuItems).forEach(
-      (menuItem): void => {
-        menuItem.checked = false;
-      }
-    );
+    Object.values(this.menuItems).forEach((menuItem): void => {
+      menuItem.checked = false;
+    });
     this.menuItems[this.mode].checked = true;
     store.set("proxy-mode", mode);
   }
@@ -160,11 +147,11 @@ class SystemProxy {
   private turnOnPacServer(): void {
     let pacPath = this.pacPath;
     this.pacServer = http
-      .createServer(function(req, res): void {
-        fs.readFile(pacPath, function(err, file): void {
+      .createServer(function (req, res): void {
+        fs.readFile(pacPath, function (err, file): void {
           if (err) {
             res.writeHead(500, {
-              "Content-Type": "text/plain"
+              "Content-Type": "text/plain",
             });
             res.write(err + "\n");
             res.end();

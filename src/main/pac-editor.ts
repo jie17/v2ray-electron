@@ -16,21 +16,16 @@ class PacEditor {
         width: 800,
         height: 600,
         title: "Pac Editor",
-        webPreferences: { nodeIntegration: true }
+        webPreferences: { nodeIntegration: true },
       });
-      this.win.on(
-        "closed",
-        (): void => {
-          this.win = null;
-        }
-      );
+      this.win.on("closed", (): void => {
+        this.win = null;
+      });
 
       this.win.setMenu(null);
       if (isDevelopment) {
         this.win.loadURL(
-          `http://localhost:${
-            process.env.ELECTRON_WEBPACK_WDS_PORT
-          }?route=pacEditor`
+          `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?route=pacEditor`
         );
       } else {
         this.win.loadURL(
@@ -38,7 +33,7 @@ class PacEditor {
             pathname: path.join(__dirname, "index.html"),
             protocol: "file",
             slashes: true,
-            query: { route: "pacEditor" }
+            query: { route: "pacEditor" },
           })
         );
       }

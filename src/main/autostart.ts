@@ -6,9 +6,9 @@ class AutoStart {
   public constructor() {
     this.autoLauncher = new AutoLaunch({
       mac: {
-        useLaunchAgent: true
+        useLaunchAgent: true,
       },
-      name: app.getName()
+      name: app.getName(),
     });
   }
 
@@ -17,16 +17,14 @@ class AutoStart {
   }
 
   public toggle(): Promise<boolean> {
-    return this.isEnabled().then(
-      (isEnabled): boolean => {
-        if (isEnabled) {
-          this.autoLauncher.disable();
-        } else {
-          this.autoLauncher.enable();
-        }
-        return !isEnabled;
+    return this.isEnabled().then((isEnabled): boolean => {
+      if (isEnabled) {
+        this.autoLauncher.disable();
+      } else {
+        this.autoLauncher.enable();
       }
-    );
+      return !isEnabled;
+    });
   }
 }
 

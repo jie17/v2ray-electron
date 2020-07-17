@@ -29,7 +29,7 @@ function initTray(
 
     contextMenu.append(
       new MenuItem({
-        type: "separator"
+        type: "separator",
       })
     );
   }
@@ -39,7 +39,7 @@ function initTray(
       label: "Restart V2Ray",
       click(): void {
         worker.restart();
-      }
+      },
     })
   );
 
@@ -47,26 +47,22 @@ function initTray(
     label: "Start on Boot",
     type: "checkbox",
     click: (): void => {
-      autoStart.toggle().then(
-        (isEnabled): void => {
-          menuForAutoStart.checked = isEnabled;
-        }
-      );
-    }
+      autoStart.toggle().then((isEnabled): void => {
+        menuForAutoStart.checked = isEnabled;
+      });
+    },
   });
   contextMenu.append(menuForAutoStart);
-  autoStart.isEnabled().then(
-    (isEnabled): void => {
-      menuForAutoStart.checked = isEnabled;
-    }
-  );
+  autoStart.isEnabled().then((isEnabled): void => {
+    menuForAutoStart.checked = isEnabled;
+  });
 
   contextMenu.append(
     new MenuItem({
       label: "Edit V2Ray Config",
       click(): void {
         configEditor.launch();
-      }
+      },
     })
   );
 
@@ -76,7 +72,7 @@ function initTray(
         label: "Edit PAC File",
         click(): void {
           pacEditor.launch();
-        }
+        },
       })
     );
   }
@@ -86,7 +82,7 @@ function initTray(
       label: "Show V2Ray Log",
       click(): void {
         logger.showWindow();
-      }
+      },
     })
   );
 
@@ -99,13 +95,13 @@ function initTray(
           icon_path: path.join(__dirname, "assets", "icon-win32.png")
           /*eslint-enable */
         });
-      }
+      },
     })
   );
 
   contextMenu.append(
     new MenuItem({
-      role: "quit"
+      role: "quit",
     })
   );
 

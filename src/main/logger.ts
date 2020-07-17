@@ -23,7 +23,7 @@ export default class Logger {
     }
     global.store = [
       ...global.store,
-      ...lines.map((line): LogLine => ({ line, id: this.logId++ }))
+      ...lines.map((line): LogLine => ({ line, id: this.logId++ })),
     ];
     if (global.store.length > MAX_LINE_NUMBER) {
       global.store = global.store.slice(global.store.length - MAX_LINE_NUMBER);
@@ -39,22 +39,17 @@ export default class Logger {
         width: 800,
         height: 600,
         title: "Log Viewer - V2Ray Electron",
-        webPreferences: { nodeIntegration: true }
+        webPreferences: { nodeIntegration: true },
       });
-      this.win.on(
-        "closed",
-        (): void => {
-          this.win = null;
-          this.windowOpen = false;
-        }
-      );
+      this.win.on("closed", (): void => {
+        this.win = null;
+        this.windowOpen = false;
+      });
 
       this.win.setMenu(null);
       if (isDevelopment) {
         this.win.loadURL(
-          `http://localhost:${
-            process.env.ELECTRON_WEBPACK_WDS_PORT
-          }?route=logViewer`
+          `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}?route=logViewer`
         );
       } else {
         this.win.loadURL(
@@ -62,7 +57,7 @@ export default class Logger {
             pathname: path.join(__dirname, "index.html"),
             protocol: "file",
             slashes: true,
-            query: { route: "logViewer" }
+            query: { route: "logViewer" },
           })
         );
       }
