@@ -6,6 +6,6 @@ declare module "sudo-prompt" {
   function exec(
     command: string,
     options: SudoPromptOptions,
-    callback: Function
+    callback: (error: Error) => void
   ): void;
 }

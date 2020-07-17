@@ -9,7 +9,6 @@ import log from "electron-log";
 import { autoUpdater, UpdateCheckResult } from "electron-updater";
 import isDev from "electron-is-dev";
 
-require("electron-debug")({ showDevTools: true });
 log.transports.file.level = "debug";
 global.ROOT = isDev ? path.join(__dirname, "..", "..") : path.join(__dirname);
 let systemProxy = os.platform() === "darwin" ? new SystemProxy() : null;
@@ -22,7 +21,7 @@ app.on(
   (): void => {
     log.info("App ready");
 
-    const template = [
+    const template: Electron.MenuItemConstructorOptions[] = [
       {
         label: "Edit",
         submenu: [
@@ -32,13 +31,12 @@ app.on(
           { role: "cut" },
           { role: "copy" },
           { role: "paste" },
-          { role: "pasteandmatchstyle" },
+          { role: "pasteAndMatchStyle" },
           { role: "delete" },
-          { role: "selectall" }
+          { role: "selectAll" }
         ]
       }
     ];
-    // @ts-ignore
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
     if (!isDev) {

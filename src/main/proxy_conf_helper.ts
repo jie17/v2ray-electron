@@ -7,9 +7,11 @@ import sudo from "sudo-prompt";
 import Store from "electron-store";
 const store = new Store<string>();
 
+type Mode = "standalone" | "pac" | "global";
+
 class SystemProxy {
   private userDataPath: string;
-  private mode: string;
+  private mode?: Mode;
   public menuItems: {
     standalone: MenuItem;
     pac: MenuItem;
@@ -21,9 +23,29 @@ class SystemProxy {
   private proxyConfHelperPath: string;
   public constructor() {
     this.pacServer = null;
-    // @ts-ignore
-    this.menuItems = {};
-    this.mode = "";
+    this.menuItems = {
+      standalone: new MenuItem({
+        label: "Standalone Mode",
+        type: "radio",
+        click: () => {
+          this.applyMode("standalone");
+        }
+      }),
+      pac: new MenuItem({
+        label: "Pac Mode",
+        type: "radio",
+        click: () => {
+          this.applyMode("pac");
+        }
+      }),
+      global: new MenuItem({
+        label: "Global Mode",
+        type: "radio",
+        click: () => {
+          this.applyMode("global");
+        }
+      })
+    };
     this.userDataPath = app.getPath("userData");
     this.pacPath = path.join(this.userDataPath, "proxy.pac");
     this.proxyConfHelperPath = path.join(
@@ -34,10 +56,9 @@ class SystemProxy {
       .join(global.ROOT, "assets", "proxy_conf_helper")
       .replace("app.asar", "app.asar.unpacked");
     this.installHelper();
-    this.initializeMenuItems();
     let mode = store.get("proxy-mode");
     if (mode) {
-      this.applyMode(mode);
+      this.applyMode(mode as Mode);
     } else {
       this.setMode("standalone");
     }
@@ -78,34 +99,7 @@ class SystemProxy {
     }
   }
 
-  private initializeMenuItems(): void {
-    let me = this;
-    me.menuItems = {
-      standalone: new MenuItem({
-        label: "Standalone Mode",
-        type: "radio",
-        click(): void {
-          me.applyMode("standalone");
-        }
-      }),
-      pac: new MenuItem({
-        label: "Pac Mode",
-        type: "radio",
-        click(): void {
-          me.applyMode("pac");
-        }
-      }),
-      global: new MenuItem({
-        label: "Global Mode",
-        type: "radio",
-        click(): void {
-          me.applyMode("global");
-        }
-      })
-    };
-  }
-
-  private applyMode(mode: string): void {
+  private applyMode(mode: Mode): void {
     let realHelperPath;
     if (fs.existsSync(this.proxyConfHelperPath)) {
       realHelperPath = this.proxyConfHelperPath;
@@ -140,14 +134,13 @@ class SystemProxy {
     }
   }
 
-  public setMode(mode: string): void {
+  public setMode(mode: Mode): void {
     this.mode = mode;
     Object.values(this.menuItems).forEach(
       (menuItem): void => {
         menuItem.checked = false;
       }
     );
-    // @ts-ignore
     this.menuItems[this.mode].checked = true;
     store.set("proxy-mode", mode);
   }

@@ -23,9 +23,8 @@ function initTray(
   let pacEditor = new PacEditor();
 
   if (systemProxy) {
-    for (let key in systemProxy.menuItems) {
-      // @ts-ignore
-      contextMenu.append(systemProxy.menuItems[key]);
+    for (let [, value] of Object.entries(systemProxy.menuItems)) {
+      contextMenu.append(value);
     }
 
     contextMenu.append(
