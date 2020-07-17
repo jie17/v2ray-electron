@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
-    "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist -c.compression=store -c.mac.identity=null",
+    "dist": "yarn compile && electron-builder -p never",
     "lint": "eslint --max-warnings 0 --ext .js --ext .ts .",
     "download": "tsc download-v2ray.ts && node download-v2ray.js"
   },
@@ -63,9 +62,6 @@
     "webpack": "^4.35.2"
   },
   "build": {
-    "publish": [
-      "github"
-    ],
     "appId": "com.v2ray.electron",
     "productName": "V2Ray Electron",
     "asarUnpack": [
@@ -73,6 +69,7 @@
       "assets/proxy_conf_helper"
     ],
     "mac": {
+      "publish": [],
       "icon": "assets/icon.icns",
       "files": [
         "src/**",
@@ -84,6 +81,7 @@
       ]
     },
     "win": {
+      "publish": [],
       "icon": "assets/icon.ico",
       "files": [
         "src/**",

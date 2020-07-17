@@ -3,7 +3,7 @@ name: Build
 on: [push]
 
 jobs:
-  test:
+  build:
     runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v2
@@ -14,9 +14,9 @@ jobs:
       - run: yarn
       - run: yarn lint
       - run: yarn download
-      - run: yarn dist --win --mac
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: yarn dist
+        # env:
+        #   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v2
         with:
           name: artifact
