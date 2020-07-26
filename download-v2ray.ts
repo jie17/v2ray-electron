@@ -115,7 +115,7 @@ function runningOnTravis(): boolean {
 
 switchIntoWorkSpace();
 
-if (runningOnTravis()) {
+if (runningOnTravis() || process.argv.length === 3) {
   const platforms: NodeJS.Platform[] = ["win32", "darwin"];
   platforms.forEach((platform): void => runTaskOnPlatform(platform));
 } else {

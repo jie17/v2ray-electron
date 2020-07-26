@@ -9,7 +9,8 @@
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder -p never",
     "lint": "eslint --max-warnings 0 --ext .js --ext .ts .",
-    "download": "ts-node download-v2ray.ts"
+    "download": "ts-node download-v2ray.ts",
+    "downloadAll": "ts-node download-v2ray.ts --all"
   },
   "license": "MIT",
   "dependencies": {
@@ -69,7 +70,6 @@
       "assets/proxy_conf_helper"
     ],
     "mac": {
-      "publish": [],
       "icon": "assets/icon.icns",
       "files": [
         "src/**",
@@ -81,7 +81,6 @@
       ]
     },
     "win": {
-      "publish": [],
       "icon": "assets/icon.ico",
       "files": [
         "src/**",
