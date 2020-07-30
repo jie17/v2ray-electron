@@ -78,7 +78,10 @@
           "from": "assets/v2ray/v2ray-macos",
           "to": "assets/v2ray/v2ray"
         }
-      ]
+      ],
+      "extendInfo": {
+        "LSUIElement": 1
+      }
     },
     "win": {
       "icon": "assets/icon.ico",
