@@ -9,8 +9,8 @@
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder -p never",
     "lint": "eslint --max-warnings 0 --ext .js --ext .ts .",
-    "download": "ts-node download-v2ray.ts",
-    "downloadAll": "ts-node download-v2ray.ts --all"
+    "download": "ts-node -O '{\"module\":\"commonjs\"}' download-v2ray.ts",
+    "downloadAll": "ts-node -O '{\"module\":\"commonjs\"}' download-v2ray.ts --all"
   },
   "license": "MIT",
   "dependencies": {
